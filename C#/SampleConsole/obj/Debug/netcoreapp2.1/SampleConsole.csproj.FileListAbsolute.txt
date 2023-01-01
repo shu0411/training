@@ -1,0 +1,11 @@
+C:\Users\shu32\work\vscode\C#\SampleConsole\bin\Debug\netcoreapp2.1\SampleConsole.deps.json
+C:\Users\shu32\work\vscode\C#\SampleConsole\bin\Debug\netcoreapp2.1\SampleConsole.runtimeconfig.json
+C:\Users\shu32\work\vscode\C#\SampleConsole\bin\Debug\netcoreapp2.1\SampleConsole.runtimeconfig.dev.json
+C:\Users\shu32\work\vscode\C#\SampleConsole\bin\Debug\netcoreapp2.1\SampleConsole.dll
+C:\Users\shu32\work\vscode\C#\SampleConsole\bin\Debug\netcoreapp2.1\SampleConsole.pdb
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.csprojAssemblyReference.cache
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.csproj.CoreCompileInputs.cache
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.AssemblyInfoInputs.cache
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.AssemblyInfo.cs
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.dll
+C:\Users\shu32\work\vscode\C#\SampleConsole\obj\Debug\netcoreapp2.1\SampleConsole.pdb

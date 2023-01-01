@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\shu32\\work\\vscode\\C#\\ABC086A\\ABC086A.csproj": {}
+    "C:\\Users\\shu32\\work\\vscode\\C#\\PracticeA_2\\PracticeA_2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\shu32\\work\\vscode\\C#\\ABC086A\\ABC086A.csproj": {
+    "C:\\Users\\shu32\\work\\vscode\\C#\\PracticeA_2\\PracticeA_2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shu32\\work\\vscode\\C#\\ABC086A\\ABC086A.csproj",
-        "projectName": "ABC086A",
-        "projectPath": "C:\\Users\\shu32\\work\\vscode\\C#\\ABC086A\\ABC086A.csproj",
+        "projectUniqueName": "C:\\Users\\shu32\\work\\vscode\\C#\\PracticeA_2\\PracticeA_2.csproj",
+        "projectName": "PracticeA_2",
+        "projectPath": "C:\\Users\\shu32\\work\\vscode\\C#\\PracticeA_2\\PracticeA_2.csproj",
         "packagesPath": "C:\\Users\\shu32\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shu32\\work\\vscode\\C#\\ABC086A\\obj\\",
+        "outputPath": "C:\\Users\\shu32\\work\\vscode\\C#\\PracticeA_2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -21,14 +21,14 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net50"
+          "netcoreapp2.1"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net50": {
+          "netcoreapp2.1": {
             "projectReferences": {}
           }
         },
@@ -39,11 +39,19 @@
         }
       },
       "frameworks": {
-        "net50": {}
-      },
-      "runtimes": {
-        "win7-x86": {
-          "#import": []
+        "netcoreapp2.1": {
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "target": "Package",
+              "version": "[2.1.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
         }
       }
     }
