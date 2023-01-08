@@ -18,7 +18,7 @@ namespace ABC081B
         //入力
         //入力は以下の形式で標準入力から与えられる。
         //N
-        //A1A2... AN
+        //A1 A2 ... AN
         //出力
         //すぬけ君は最大で何回操作を行うことができるかを出力せよ．
         static void Main(string[] args)
