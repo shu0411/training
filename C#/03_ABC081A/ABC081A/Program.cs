@@ -17,7 +17,22 @@ namespace ABC081A
         //答えを出力せよ。
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //入力値取得
+            string inputStr = Console.ReadLine();
+            char[] splittedInputStr = inputStr.ToCharArray();
+
+            //計算処理
+            int countOne = 0;
+            foreach (char splittedChar in splittedInputStr )
+            {
+                if(splittedChar == '1')
+                {
+                    countOne++;
+                }
+            }
+
+            //出力処理
+            Console.WriteLine(countOne.ToString());
         }
     }
 }
