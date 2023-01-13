@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{918A2EF7-BF9D-414A-81AD-5636F329F727}</ProjectGuid>
+    <ProjectGuid>{A1DC5ACE-E8D6-4C1C-923D-F563933188DD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ABC081B</RootNamespace>
-    <AssemblyName>ABC081B</AssemblyName>
+    <RootNamespace>ABC081B_2</RootNamespace>
+    <AssemblyName>ABC081B_2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -44,12 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

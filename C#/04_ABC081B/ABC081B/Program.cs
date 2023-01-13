@@ -21,9 +21,47 @@ namespace ABC081B
         //A1 A2 ... AN
         //出力
         //すぬけ君は最大で何回操作を行うことができるかを出力せよ．
+
+        //【線形探索】
         static void Main(string[] args)
         {
+            //入力値取得
+            string input1 = Console.ReadLine();
+            string input2 = Console.ReadLine();
+            string[] inputStrArray = input2.Split(' ');
 
+            //計算処理
+            int ansNum = -1; //出力値
+            foreach (string checkStr in inputStrArray)
+            {
+                //2で割っていって何回割れるか
+                int countDevide = 0;
+                int checkNum = Convert.ToInt32(checkStr);
+                while (checkNum % 2 == 0)
+                {
+                    checkNum = checkNum / 2;
+                    countDevide++;
+                }
+
+                //割った回数が今の出力値より多かったら出力値を更新
+                if(ansNum == -1)
+                {
+                    ansNum = countDevide;
+                }
+                else
+                {
+                    ansNum = (countDevide < ansNum) ? countDevide : ansNum;
+                }
+
+                //出力値の最小は0なので0になったら後続をスキップ
+                if(ansNum == 0)
+                {
+                    break;
+                }
+            }
+
+            //出力処理
+            Console.WriteLine(ansNum.ToString());
         }
     }
 }
