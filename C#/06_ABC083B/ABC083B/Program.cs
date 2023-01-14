@@ -22,7 +22,36 @@ namespace ABC083B
         //10 進法での各桁の和が A 以上 B 以下であるものの総和を出力せよ。
         static void Main(string[] args)
         {
+            //入力
+            string inputStr = Console.ReadLine();
+            string[] inputStrArray = inputStr.Split(' ');
+            int N = Convert.ToInt32(inputStrArray[0]);
+            int A = Convert.ToInt32(inputStrArray[1]);
+            int B = Convert.ToInt32(inputStrArray[2]);
 
+            //処理
+            int ans = 0;
+            //1～Nまでのループ
+            for(int i = 1; i <= N; i++)
+            {
+                //1の位～10000の位までの5桁の値を足す
+                int sumDigit =
+                            i / 10000               //10000の位の値
+                            + (i % 10000) / 1000    //1000の位の値
+                            + (i % 1000) / 100      //100の位の値
+                            + (i % 100) / 10        //10の位の値
+                            + (i % 10);             //1の位の値
+
+                //その総和がA以上B以下だったら答えに加算する
+                if (sumDigit >= A && sumDigit <= B)
+                {
+                    ans += i;
+                }
+
+            }
+
+            //出力
+            Console.WriteLine(ans.ToString());
         }
     }
 }
