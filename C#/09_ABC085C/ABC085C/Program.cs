@@ -35,11 +35,31 @@ namespace ABC085C
             int Y = Convert.ToInt32(inputStrArray[1]);
 
             //処理
+            int outX = -1;
+            int outY = -1;
+            int outZ = -1;
+            int checkZ = 0;
+            int sum = 0;
 
+            for(int checkX = 0; checkX <= N; checkX++)
+            {
+                for(int checkY = 0; checkY <= N - checkX; checkY++)
+                {
+                    checkZ = N - checkX - checkY;
+                    sum = 10000 * checkX + 5000 * checkY + 1000 * checkZ;
+                    if(sum == Y)
+                    {
+                        outX = checkX;
+                        outY = checkY;
+                        outZ = checkZ;
+                        break;
+                    }
+                }
+            }
 
             //出力
-
-
+            string outStr = outX.ToString() + " " + outY.ToString() + " " + outZ.ToString();
+            Console.WriteLine(outStr);
         }
     }
 }
