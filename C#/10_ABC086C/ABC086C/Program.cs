@@ -72,12 +72,17 @@ namespace ABC086C
                 //距離と移動回数の偶奇関係
                 //1回の移動でX方向かY方向の値が必ず変わるので、
                 //距離の偶奇と移動回数の偶奇は一致する必要がある。
-                if()
+                if(dist % 2 != (inputT - beforeT) % 2)
                 {
                     //距離と移動回数の偶奇が一致しない場合移動不可なのでfalseを返して処理終了
                     ret = false;
                     break;
                 }
+
+                //次のチェックに進むために変数に格納
+                beforeT = inputT;
+                beforeX = inputX;
+                beforeY = inputY;
             }
 
             //出力
