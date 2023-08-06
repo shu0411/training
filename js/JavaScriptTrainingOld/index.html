@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+<script type="text/javascript">
+//No8まで
+
+
+document.body.style.backgroundColor = "#000000";           //背景色
+document.body.style.color = "#ffffff";  //文字色
+
+//変数宣言
+var v_name = "てすとさん";  //プレイヤーの名前
+var n_lv = 30;              //プレイヤーのレベル
+var n_defaultLv = 30;       //プレイヤーのデフォルトレベル
+var n_hp = 30;              //プレイヤーのヒットポイント
+var n_maxHp = 30;           //プレイヤーの最大ヒットポイント
+var n_gold = 100;           //プレイヤーの所持金
+var n_en;                   //敵の数
+var n_exp;                  //敵の経験値
+var scrState;               //画面状態
+var SCR = {     //画面状態の種類
+    TOWN : 0,   //町
+    FIGHT : 1,  //戦闘中
+    WIN : 2,    //勝ち
+    LOSE : 3,   //負け
+}
+
+var cmd = new Array("1.すぐに倒しに行く",
+                    "2.修行する",
+                    "3.宿屋に泊まる");
+
+
+/*
+var cmd = new Array( 3 );
+cmd[ 0 ] = "1.すぐに倒しに行く";
+cmd[ 1 ] = "2.修行する";
+cmd[ 2 ] = "3.宿屋に泊まる";
+*/
+
+putStatus();
+putJosyou();
+putCommand();
+window.addEventListener( "keydown", keyPressed, false );
+
+//関数部
+
+function keyPressed( ev )
+{
+    switch(ev.keyCode){
+        case 49:
+        case 97:
+        {   //1キー押下
+            putBoss();
+            break;
+        }
+        case 50:
+        case 98:
+        {   //2キー押下
+            putSyugyou();
+            break;
+        }
+        case 51:
+        case 99:
+        {   //3キー押下
+            putRest();
+            break;
+        }
+        case 32:
+        {   //Spaceキー押下
+            putReset();
+            break;
+        }
+        case 13:
+        {   //Enterキー押下
+            if(scrState == SCR.FIGHT){ //敵が残っている
+                putFight();
+                break;
+            }else if(scrState == SCR.WIN){ //敵が全滅
+                clearText();
+                putStatus();
+                put("");
+                put("");
+                put("");
+                putWindow("敵の群れをやっつけた！<br>"
+                + v_name + "は、レベルが" + n_exp + "上がった。");
+                n_lv += n_exp;
+                scrState = SCR.TOWN;
+                break;
+            }else if(scrState == SCR.LOSE){
+                clearText();
+                putStatus();
+                putEnemy();
+                putWindow("GAME OVER");
+                scrState = SCR.TOWN;
+                initStatus();
+                break;
+            }else{
+                clearText();
+                putStatus();
+                putCommand();
+                break;
+            }
+        }
+        default:
+        {
+            put( ev.keyCode );
+            break;
+        }
+    }
+}
+
+//序章を表示
+function putJosyou(){
+    put("GAME START!");
+    put("魔王が世界を滅ぼそうとしています。");
+}
+
+//選択用コマンド内容を表示
+function putCommand(){
+    for(var i = 0; i < cmd.length ; i++ ){
+        put( cmd[ i ] );
+    }
+}
+
+//1.ボス戦
+function putBoss()
+{
+    clearText();
+    putStatus();
+    if(n_lv < 40){
+        putGameOver();
+    }else{
+        putGameClear();
+    }
+    n_lv = n_defaultLv;
+}
+
+//ゲームオーバーの文章を表示
+function putGameOver(){
+    put( v_name + "は魔王に負けました！！");
+    put("GAME OVER...");
+}
+
+//ゲームクリアの文章を表示
+function putGameClear(){
+    put( v_name + "は魔王を倒しました！！");
+    if(n_lv >= 100) {
+        put("レベル" + n_lv + "なので超楽勝。");
+    }else if(n_lv >= 70) {
+        put("レベル" + n_lv + "なので楽勝。");
+    }else{
+        put("レベル" + n_lv + "なので苦戦。");
+    }
+    put("GAME CLEAR!!");
+}
+
+//2.修行の内容を表示
+function putSyugyou(){
+    //レベルアップ処理
+    //敵の数:1～3の乱数(切り捨て)
+    n_en = Math.floor ( Math.random() * 5 ) + 1;
+    n_exp = n_en;
+    scrState = SCR.FIGHT;
+    putFight();
+}
+
+//戦闘処理
+function putFight(){
+    clearText();
+    putStatus();
+    putEnemy();
+    var dm;
+    var msg = v_name + "は修行した！<br>" ;
+    for(var i=0; i < n_en; i++ ){
+        dm = Math.floor ( Math.random() * 5 ); //5未満の乱数(切り捨て)
+        addHP(-dm);
+        msg += v_name + "は、 " + dm + "ポイントのダメージを受けた！<br>"
+    }
+    putWindow( msg
+           + v_name + "の攻撃！敵をやっつけた。"
+           + "<div align=\"center\">▼</div>" );
+    n_en--;
+    
+    if(n_en == 0){
+        scrState = SCR.WIN;
+    }
+    //ゲームオーバー時
+    if (n_hp == 0) {
+        scrState = SCR.LOSE;
+    }
+}
+
+//敵処理
+function putEnemy(){
+    var allEnemy = "<div align=\"center\">";
+    var oneEnemy = "<img src=\"monster.png\">";
+    for(var i=0; i < n_en; i++ ){
+        allEnemy += oneEnemy;
+    }
+    allEnemy += "</div>";
+    put( allEnemy );
+}
+
+//3.休憩の内容を表示
+function putRest(){
+    clearText();
+    if( n_gold >= 10 ){
+        addHP( n_lv );
+        n_gold -= 10;
+        putStatus();
+        put( v_name + "は休んだ！" );
+    } else {
+        putStatus();
+        put("お金が足りません・・・");
+    }
+    put("");
+    putCommand();
+}
+
+//初期化
+function putReset(){
+    document.body.style.color = "#ffffff";
+    clearText();
+    putStatus();
+    putJosyou();
+    putCommand();
+    initStatus();
+}
+function initStatus(){
+    n_hp = n_maxHp;
+    n_lv = n_defaultLv;
+    n_gold = 100;
+}
+
+//ヒットポイント増減
+function addHP( val ) {
+    n_hp += val;
+    if(n_hp > n_maxHp){
+        n_hp = n_maxHp;
+    } else if (n_hp < 0) {
+        n_hp = 0;
+    }
+    if(n_hp == 0){ //HPが0のとき
+        document.body.style.color = "#ff0000"; //文字色を赤に
+    }else if(n_hp <= n_maxHp / 4){ //HPがmaxHPの4分の1以下
+        document.body.style.color = "#ffaa00"; //文字色をオレンジに
+    }else{ //それ以外のとき
+        document.body.style.color = "#ffffff"; //文字色を白に
+    }
+}
+
+//ステータス表示
+function putStatus(){
+    putWindow( v_name + "　LV：" + n_lv + "　HP："+ n_hp + "/" + n_maxHp + "　GOLD：" + n_gold );
+    }
+
+//ウィンドウ表示
+function putWindow( str ){
+    put( "<div align=\"center\"><div align=\"left\"; style=\"border:3px solid #ffffff; border-radius:6px; width:25em;\">" + str + "</div></div>");
+
+}
+
+//文字表示
+function put(str){
+    document.body.innerHTML += str + "<br>";
+}
+
+//文字クリア
+function clearText(){
+    document.body.innerHTML = ""
+}
+
+</script>
+</body>
+</html>
