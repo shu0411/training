@@ -4,7 +4,6 @@
     "@types/node": "^20.4.10",
     "mapbox-gl": "^2.15.0",
     "ts-node": "^10.9.1",
-    "tsc": "^2.0.4",
     "typescript": "^5.1.6"
   }
 }
