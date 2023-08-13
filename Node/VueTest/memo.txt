@@ -1,0 +1,5 @@
+下記公式ドキュメント参照
+https://ja.vuejs.org/guide/introduction.html
+https://ja.vuejs.org/guide/quick-start.html
+
+ローカルファイルから別のローカルファイルはセキュリティ上読み込めない。

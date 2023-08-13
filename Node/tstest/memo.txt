@@ -1,0 +1,4 @@
+Udemy講座で学習中
+https://syslabojp.udemy.com/course/typescript-complete/learn/lecture/17877178
+
+8/13現在：19. Enumを使って、特定のまとまったグループのみを受け入れる列挙型を使う方法～
