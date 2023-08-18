@@ -1,8 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
-    <script src="https://unpkg.com/vue@next"></script>
+    <link href="/VueTest/style.css" rel="stylesheet" />
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@next/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+    <script type="module" src="/VueTest/main.js"></script>
     <title>Vue Test</title>
   </head>
   <body>
@@ -11,14 +18,5 @@
         Count is: {{ count }}
       </button>
     </div>
-    <script>
-      Vue.createApp({
-        setup() {
-          return {
-            count: Vue.ref(0)
-          }
-        }
-      }).mount('#app')
-    </script>
   </body>
 </html>

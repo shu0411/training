@@ -1,0 +1,9 @@
+body {
+    margin: 3;
+    padding: 3;
+}
+
+button {
+    font-size: large;
+    font-weight: bold;
+}
