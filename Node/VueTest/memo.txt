@@ -22,4 +22,8 @@ https://trainingbucket0211.s3.ap-northeast-1.amazonaws.com/VueTest/index3.html
 	Vue Test2との違いはテンプレートをこっちに持ってきただけ。
 	すっきりはするがロード時にテンプレートが一瞬表示されるのは微妙
 Vue Test4：
-	蒸気をベースに、Udemy講座に準拠させた。
+	上記をベースに、Udemy講座に準拠させた。
+
+
+https://ja.vuejs.org/guide/quick-start.html#creating-a-vue-application
+→http://localhost:5173/
