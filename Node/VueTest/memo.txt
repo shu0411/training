@@ -3,3 +3,18 @@ https://ja.vuejs.org/guide/introduction.html
 https://ja.vuejs.org/guide/quick-start.html
 
 ローカルファイルから別のローカルファイルはセキュリティ上読み込めない。
+
+https://trainingbucket0211.s3.ap-northeast-1.amazonaws.com/VueTest/index.html
+	https://ja.vuejs.org/guide/introduction.html#what-is-vue
+	「はじめに」を参考にした最初の形
+https://trainingbucket0211.s3.ap-northeast-1.amazonaws.com/VueTest/index2.html
+	https://ja.vuejs.org/guide/quick-start.html#using-vue-from-cdn
+	「CDN の Vue を使用する」を参考にした形
+	現時点では3パターンの中ではこれが一番よさそう
+	・テンプレートをjsで書き、ページ生成しているので、リロード時にテンプレートの内容が見えない
+	・ただし、テンプレートが複雑になってくると見栄えが悪そう。
+https://trainingbucket0211.s3.ap-northeast-1.amazonaws.com/VueTest/index3.html
+	https://ja.vuejs.org/guide/quick-start.html#using-vue-from-cdn
+	「CDN の Vue を使用する」のうち、「モジュールの分割」を参考にした形
+	Vue Test2との違いはテンプレートをこっちに持ってきただけ。
+	すっきりはするがロード時にテンプレートが一瞬表示される野は微妙

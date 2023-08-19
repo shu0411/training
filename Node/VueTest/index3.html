@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="/VueTest/style.css" rel="stylesheet" />
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@next/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+    <script type="module">
+        import { createApp } from 'vue'
+        import mainApp from '/VueTest/main3.js'
+      
+        createApp(mainApp).mount('#app')
+      </script>
+    <title>Vue Test3</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue Test3</h1>
+      <p>https://ja.vuejs.org/guide/quick-start.html#using-vue-from-cdn</p>
+      <p>「CDN の Vue を使用する」のうち、「モジュールの分割」を参考にした形</p>
+      <p>Vue Test2との違いはテンプレートをこっちに持ってきただけ。</p>
+      <p>すっきりはするがロード時にテンプレートが一瞬表示される野は微妙</p>
+      <button @click="count++">
+        count is {{ count }}
+      </button>
+    </div>
+  </body>
+</html>

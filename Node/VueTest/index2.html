@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="/VueTest/style.css" rel="stylesheet" />
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@next/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+    <script type="module">
+        import { createApp } from 'vue'
+        import MyComponent from '/VueTest/main2.js'
+      
+        createApp(MyComponent).mount('#app')
+      </script>
+    <title>Vue Test2</title>
+  </head>
+  <body>
+    <h1>Vue Test2</h1>
+    <p>https://ja.vuejs.org/guide/quick-start.html#using-vue-from-cdn</p>
+    <p>「CDN の Vue を使用する」を参考にした形</p>
+    <p>現時点では3パターンの中ではこれが一番よさそう</p>
+    <p>・テンプレートをjsで書き、ページ生成しているので、リロード時にテンプレートの内容が見えない</p>
+    <p>・ただし、テンプレートが複雑になってくると見栄えが悪そう。</p>
+    <div id="app">
+    </div>
+  </body>
+</html>
