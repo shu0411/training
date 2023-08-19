@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="/VueTest/style.css" rel="stylesheet" />
+    <script src="https://unpkg.com/vue@next/dist/vue.global.js"></script>
+    <!--<script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@next/dist/vue.esm-browser.js"
+        }
+      }
+    </script>-->
+    <script type="module" src="/VueTest/main4.js"></script>
+    <title>Vue Test4</title>
+  </head>
+  <body>
+    <h1>Vue Test4</h1>
+    <p>https://syslabojp.udemy.com/course/learn-vuejs/</p>
+    <p>Udemyの書き方に準拠したバージョン</p>
+    <div id="app">
+      <button @click="count++">
+        Count is: {{ count }}
+      </button>
+      <h3>メッセージテスト</h3>
+      <p>Using text interpolation: ボタンが{{ countcolor }}回押された</p>
+      <p>Using v-html directive: ボタンが<span v-html="countcolor"></span>回押された</p>
+      <h3>バージョン</h3>
+      <p>Vue Version is {{ ver }}</p>
+      <h3>Udemy講座用</h3>
+      <p>{{ message }}</p>
+      <p>{{ user.lastName }}</p>
+      <p>{{ colors[1] }}</p>
+    </div>
+  </body>
+</html>

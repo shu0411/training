@@ -20,6 +20,9 @@
       <button @click="count++">
         Count is: {{ count }}
       </button>
+      <p>メッセージテスト</p>
+      <p>Using text interpolation: ボタンが{{ countcolor }}回押された</p>
+      <p>Using v-html directive: ボタンが<span v-html="countcolor"></span>回押された</p>
     </div>
   </body>
 </html>
