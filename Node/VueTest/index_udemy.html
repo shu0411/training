@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next/dist/vue.global.js"></script>
+    <!--<script type="module" src="/VueTest/main_udemy.js"></script>-->
+    <script type="module" src="D:\work\training\Node\VueTest\main_udemy.js"></script>
+    <title>Vue Test</title>
+  </head>
+  <body>
+    <h1>Vue Test4</h1>
+    <div id="app">
+      <h3>Udemy講座用_ディレクティブ,コンポーネント</h3>
+      <hello-component></hello-component>
+      <hello-component></hello-component>
+      <hello-component></hello-component>
+      <input type="text" v-model="message2"></input><br>
+      <input type="text" v-model="message2"></input><br>
+      <input type="text" v-bind:value="message2"></input><br>
+      <button v-on:click="onClick">Click Here!</button>
+      <p>{{nowTime}}</p>
+      <ul>
+        <li v-for="(value, key) in user">
+          {{key}} : {{value}}
+        </li>
+      </ul>
+      <ol>
+        <li v-for="color in colors">{{color}}</li>
+      </ol>
+      <p v-if="toggle">Hello</p>
+      <input type="text" v-bind:value="message"></input>
+      
+      <h3>Udemy講座用_テキストのデータバインディング</h3>
+      <p>{{ message }}</p>
+      <p>{{ user.lastName }}</p>
+      <p>{{ colors[1] }}</p>
+      <button @click="count++">
+        Count is: {{ count }}
+      </button>
+      <h3>バージョン</h3>
+      <p>Vue Version is {{ ver }}</p>
+    </div>
+  </body>
+</html>

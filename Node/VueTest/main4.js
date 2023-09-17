@@ -1,5 +1,3 @@
-//import { createApp, ref } from 'vue'
-
 console.log(Vue.version)
 
 const app = Vue.createApp({
