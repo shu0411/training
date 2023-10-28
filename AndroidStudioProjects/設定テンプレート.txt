@@ -1,0 +1,15 @@
+D:\work\training\AndroidStudioProjects\{アプリ名}\app\build.gradle.kts
+    buildFeatures{
+        viewBinding = true
+    }
+
+
+D:\work\training\AndroidStudioProjects\{アプリ名}\app\src\main\java\com\example\{アプリ名}\MainActivity.kt
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+}
