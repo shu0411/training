@@ -19,7 +19,7 @@ class Game:
         player = Player(self.player_group, 300, 500)
 
         #背景
-        self.bg_img = pygame.transform.scale(pygame.image.load(bg_img_path),(screen_width,screen_height))
+        self.bg_img = pygame.transform.scale(pygame.image.load(bg_image_path),(screen_width,screen_height))
         self.bg_y = 0
     
     #グループ作成
