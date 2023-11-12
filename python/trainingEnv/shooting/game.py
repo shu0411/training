@@ -51,11 +51,16 @@ class Game:
         self.enemy_group.draw(self.screen)
         self.enemy_group.update()
         
+        #デバッグ用
+        print('e:' + str(self.enemy_group))
+        
     #敵生成
     def create_enemy(self):
-        #TODO:初期位置変更処理から　#4 8:53
+        #初期座標をランダムに
+        enemy_start_pos_x = random.randint(enemy_spawn_x_margin, screen_width - enemy_spawn_x_margin )
+        enemy_start_pos_y = enemy_default_pos_y
 
         self.enemy_timer += 1
         if self.enemy_timer >= 50:
-            enemy = Enemy(self.enemy_group, enemy_default_pos_x, enemy_default_pos_y)
+            enemy = Enemy(self.enemy_group, enemy_start_pos_x, enemy_start_pos_y)
             self.enemy_timer = 0

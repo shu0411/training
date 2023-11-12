@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_group.update()
 
         #デバッグ用
-        print(self.bullet_group)
+        print('b:' + str(self.bullet_group))
 
     #入力キー取得
     def input(self):

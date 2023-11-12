@@ -28,7 +28,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         self.move()
         self.check_off_screen()
-        self.bullet_animation()
+        self.animation()
 
     #移動処理
     def move(self):
@@ -40,7 +40,7 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
     
     #アニメーション
-    def bullet_animation(self):
+    def animation(self):
         self.image_index += 0.05
         if self.image_index >= len(self.image_list):
             self.image_index = 0

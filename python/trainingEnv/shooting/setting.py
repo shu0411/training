@@ -48,10 +48,11 @@ enemy_speed = 1
 enemy_image_path = 'assets/img/enemy/'
 enemy_image_size = (50,50)
 enemy_default_pos_x = 300
-enemy_default_pos_y = 100
+enemy_spawn_x_margin = 50
+enemy_default_pos_y = 0
 #画像番号 0:正面,1:左,2:右
-player_image_index_0 = 0
-player_image_index_1 = 1
-player_image_index_2 = 2
-player_image_index_3 = 3
-player_image_index_4 = 4
+enemy_image_index_0 = 0
+enemy_image_index_1 = 1
+enemy_image_index_2 = 2
+enemy_image_index_3 = 3
+enemy_image_index_4 = 4
