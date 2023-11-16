@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         #自機を載せる台車
         self.rect = self.image.get_rect(center = (x,y))
 
-        #移動
+        #移動方向初期化
         self.direction = pygame.math.Vector2()
 
         #移動速度取得
@@ -51,7 +51,9 @@ class Player(pygame.sprite.Sprite):
         self.bullet_cooldown()
         self.bullet_group.draw(self.screen)
         self.bullet_group.update()
-    
+
+        #デバッグ用
+        print('b:' + str(self.bullet_group))
 
     #入力キー取得
     def input(self):
@@ -126,7 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     #画像の更新
     def update_image(self):
-        self.pre_image = self.image_list[self.image_index]
+        self.pre_image = self.image_list[int(self.image_index)]
         self.image = pygame.transform.scale(self.pre_image, player_image_size)
     
     #弾クールダウン処理
