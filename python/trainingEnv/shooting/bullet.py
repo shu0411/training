@@ -51,4 +51,4 @@ class Bullet(pygame.sprite.Sprite):
     def update_image(self):
         self.pre_image = self.image_list[int(self.image_index)]
         self.image = pygame.transform.scale(self.pre_image, bullet_image_size)
-    
+        
