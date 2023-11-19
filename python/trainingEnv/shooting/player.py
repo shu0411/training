@@ -5,8 +5,11 @@ from bullet import Bullet
 class Player(pygame.sprite.Sprite):
 
     #初期化（元グループ、初期位置ｘ、初期位置ｙ）
-    def __init__(self, groups, x, y):
+    def __init__(self, groups, x, y, enemy_group):
         super().__init__(groups)
+
+        #敵グループ
+        self.enemy_group = enemy_group
 
         #画面取得
         self.screen = pygame.display.get_surface()
@@ -33,6 +36,10 @@ class Player(pygame.sprite.Sprite):
         #移動速度取得
         self.speed = player_speed
 
+        #体力
+        self.health = player_health
+        self.alive = True
+
         #弾グループ設定
         self.bullet_group = pygame.sprite.Group()
 
@@ -52,8 +59,12 @@ class Player(pygame.sprite.Sprite):
         self.bullet_group.draw(self.screen)
         self.bullet_group.update()
 
+        #体力
+        self.collision_enemy()
+        self.check_alive()
+
         #デバッグ用
-        print('b:' + str(self.bullet_group))
+        #print('b:' + str(self.bullet_group))
 
     #入力キー取得
     def input(self):
@@ -139,3 +150,18 @@ class Player(pygame.sprite.Sprite):
             self.fire = False
             self.cooldown_timer = 0
             
+    #敵との当たり判定
+    def collision_enemy(self):
+        for enemy in self.enemy_group:
+            if self.rect.colliderect(enemy.rect):
+                self.health -= enemy_power
+        self.check_health()
+    
+    def check_health(self):
+        if self.health <= 0:
+            self.alive = False
+
+    #生存確認
+    def check_alive(self):
+        if not self.alive:
+            self.kill()

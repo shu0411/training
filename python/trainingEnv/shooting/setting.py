@@ -25,6 +25,7 @@ scroll_speed = 0.5
 
 #自機設定
 player_speed = 5
+player_health = 3
 player_image_path = 'assets/img/player/'
 player_image_size = (50,50)
 player_default_pos_x = 300
@@ -36,6 +37,7 @@ player_image_index_right = 2
 
 #自機弾設定
 bullet_speed = 5
+bullet_power = 1
 bullet_image_path = 'assets/img/bullet/'
 bullet_image_size = (24,48)
 bullet_cooldown_time = 10
@@ -45,6 +47,8 @@ bullet_image_index_1 = 1
 
 #敵機設定
 enemy_speed = 1
+enemy_health = 3
+enemy_power = 1
 enemy_image_path = 'assets/img/enemy/'
 enemy_image_size = (50,50)
 enemy_default_pos_x = 300

@@ -4,8 +4,11 @@ from setting import *
 
 class Enemy(pygame.sprite.Sprite):
     
-    def __init__(self, groups, x, y):
+    def __init__(self, groups, x, y, bullet_group):
         super().__init__(groups)
+
+        #グループ
+        self.bullet_group = bullet_group
 
         #画像取得
         self.image_list = []
@@ -32,12 +35,18 @@ class Enemy(pygame.sprite.Sprite):
 
         #移動速度取得
         self.speed = enemy_speed
-    
+
+        #体力取得
+        self.health = enemy_health
+        self.alive = True
+
     #更新処理
     def update(self):
         self.move()
         self.check_off_screen()
         self.animation()
+        self.collision_bullet()
+        self.check_alive()
 
     #動き
     def move(self):
@@ -68,3 +77,21 @@ class Enemy(pygame.sprite.Sprite):
     def update_image(self):
         self.pre_image = self.image_list[int(self.image_index)]
         self.image = pygame.transform.scale(self.pre_image, enemy_image_size)
+    
+    #弾との当たり判定
+    def collision_bullet(self):
+        for bullet in self.bullet_group:
+            #弾が自身に当たったら、弾を消して体力を減らす
+            if self.rect.colliderect(bullet.rect):
+                bullet.kill()
+                self.health -= bullet_power
+        self.check_health()
+
+    def check_health(self):
+        if self.health <= 0:
+            self.alive = False
+
+    #生存確認
+    def check_alive(self):
+        if not self.alive:
+            self.kill()

@@ -2,6 +2,7 @@ import pygame
 import os
 import random
 from setting import *
+from support import draw_text
 from player import Player
 from enemy import Enemy
 
@@ -18,7 +19,8 @@ class Game:
         self.create_group()
 
         #自機生成
-        player = Player(self.player_group, player_default_pos_x, player_default_pos_y)
+        self.player = Player(self.player_group, player_default_pos_x, player_default_pos_y,self.enemy_group)
+        self.game_over = False
 
         #敵機生成タイマー初期化
         self.enemy_timer = 0
@@ -51,6 +53,9 @@ class Game:
         self.enemy_group.draw(self.screen)
         self.enemy_group.update()
         
+        #ゲームオーバー処理
+        self.check_game_over()
+        
         #デバッグ用
         print('e:' + str(self.enemy_group))
         
@@ -62,5 +67,11 @@ class Game:
 
         self.enemy_timer += 1
         if self.enemy_timer >= 50:
-            enemy = Enemy(self.enemy_group, enemy_start_pos_x, enemy_start_pos_y)
+            enemy = Enemy(self.enemy_group, enemy_start_pos_x, enemy_start_pos_y, self.player.bullet_group)
             self.enemy_timer = 0
+    
+    def check_game_over(self):
+        if len(self.player_group) == 0:
+            self.game_over = True
+            draw_text(self.screen, "GAME OVER", screen_width//2, screen_height//2, 75, COLOR_RED)
+            draw_text(self.screen, "Press SPACE KEY To Reset", screen_width//2, screen_height//2 + 100, 50, COLOR_GREEN)
