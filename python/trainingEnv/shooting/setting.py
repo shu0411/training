@@ -51,12 +51,16 @@ enemy_health = 3
 enemy_power = 1
 enemy_image_path = 'assets/img/enemy/'
 enemy_image_size = (50,50)
+enemy_image_index_count = 5
+enemy_image_index_def = 0
+enemy_animation_speed = 0.15  # アニメーションの速度（秒単位）
 enemy_default_pos_x = 300
 enemy_spawn_x_margin = 50
 enemy_default_pos_y = 0
-#画像番号 0:正面,1:左,2:右
-enemy_image_index_0 = 0
-enemy_image_index_1 = 1
-enemy_image_index_2 = 2
-enemy_image_index_3 = 3
-enemy_image_index_4 = 4
+
+#敵爆発設定
+explosion_image_path = 'assets/img/explosion/'
+explosion_image_size = (50,50)
+explosion_image_index_count = 5
+explosion_image_index_def = 0
+explosion_animation_speed = 0.1  # アニメーションの速度（秒単位）

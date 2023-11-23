@@ -55,6 +55,7 @@ class Game:
         
         #ゲームオーバー処理
         self.check_game_over()
+        self.reset()
         
         #デバッグ用
         print('e:' + str(self.enemy_group))
@@ -75,3 +76,10 @@ class Game:
             self.game_over = True
             draw_text(self.screen, "GAME OVER", screen_width//2, screen_height//2, 75, COLOR_RED)
             draw_text(self.screen, "Press SPACE KEY To Reset", screen_width//2, screen_height//2 + 100, 50, COLOR_GREEN)
+
+    def reset(self):
+        key = pygame.key.get_pressed()
+        if self.game_over and key[pygame.K_SPACE]:
+            self.player = Player(self.player_group, player_default_pos_x, player_default_pos_y,self.enemy_group)
+            self.enemy_group.empty()
+            self.game_over = False
