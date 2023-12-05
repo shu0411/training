@@ -40,6 +40,10 @@ class Player(pygame.sprite.Sprite):
         self.health = player_health
         self.alive = True
 
+        #効果音
+        self.shot_sound = pygame.mixer.Sound(shot_se_path)
+        self.shot_sound.set_volume(se_volume)
+
         #弾グループ設定
         self.bullet_group = pygame.sprite.Group()
 
@@ -93,6 +97,7 @@ class Player(pygame.sprite.Sprite):
         if key[pygame.K_z] and not self.fire:
             bullet = Bullet(self.bullet_group, self.rect.centerx, self.rect.top)
             self.fire = True
+            self.shot_sound.play()
     
     #移動処理
     def move(self):

@@ -23,6 +23,15 @@ image_extension = '.png'
 bg_image_path = 'assets/img/background/bg.png'
 scroll_speed = 0.5
 
+#BGM設定
+bgm_path = 'assets/sound/bgm.mp3'
+bgm_volume = 0.2
+
+#効果音設定
+shot_se_path = 'assets/sound/shot.mp3'
+explosion_se_path = 'assets/sound/explosion.mp3'
+se_volume = 0.2
+
 #自機設定
 player_speed = 5
 player_health = 3

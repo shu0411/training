@@ -2,6 +2,7 @@ import pygame
 from setting import *
 from game import Game
 
+pygame.mixer.init()
 pygame.init()
 
 #ウィンドウ作成

@@ -28,6 +28,11 @@ class Game:
         #背景
         self.bg_img = pygame.transform.scale(pygame.image.load(bg_image_path),(screen_width,screen_height))
         self.bg_y = 0
+
+        #BGM
+        pygame.mixer.music.load(bgm_path)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(bgm_volume)
     
     #グループ作成
     def create_group(self):

@@ -49,6 +49,10 @@ class Enemy(pygame.sprite.Sprite):
         #爆発
         self.explosion_flg = False
 
+        #効果音
+        self.explosion_sound = pygame.mixer.Sound(explosion_se_path)
+        self.explosion_sound.set_volume(se_volume)
+
     #更新処理
     def update(self):
         self.move()
@@ -116,5 +120,6 @@ class Enemy(pygame.sprite.Sprite):
             self.speed = 0
             explosion = Explosion(self.explosion_group, self.rect.centerx, self.rect.centery)
             self.explosion_flg = True
+            self.explosion_sound.play()
         if self.explosion_flg and len(self.explosion_group) == 0:
             self.kill()
