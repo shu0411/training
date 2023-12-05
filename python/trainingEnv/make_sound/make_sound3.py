@@ -1,3 +1,5 @@
+#汎用性高めようとしたが、音割れ。
+#ChatGPTが作成したものをベースに、pysynth.pyを参考にして作成。
 import numpy as np
 import wave
 import struct

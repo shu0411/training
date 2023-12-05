@@ -1,3 +1,5 @@
+#いい感じ。汎用性は低い。
+#chatGPTが作成
 import numpy as np
 from scipy.io.wavfile import write
 

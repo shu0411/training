@@ -1,3 +1,6 @@
+#シンプルに音を出す仕組みとしては完璧。汎用性は低め。
+#http://y-okamoto-psy1949.la.coocan.jp/Python/tips/ThreeTones/
+#https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.write.html
 from scipy.io.wavfile import write as write_wav
 import numpy as np
 import winsound
