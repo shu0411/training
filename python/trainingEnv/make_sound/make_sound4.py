@@ -1,3 +1,5 @@
+#pysynthを持ってきたもの。うまくはいっているが、未解析
+
 #!/usr/bin/env python
 
 #from demosongs import *
