@@ -25,21 +25,28 @@ N,T = map(int,input().split())
 #選手の得点
 list_point = [0]*N
 #現在の得点の一覧を作成
-table_point = [[0,[i for i in range(N)]]]
+dic_point = {0:N}
 out = 1
 
 for i in range(T):
     A,B = map(int,input().split())
+
+    #更新前の選手の得点を保持
     tmp = list_point[A-1]
+    #選手の得点を更新
     list_point[A-1] += B
-    if tmp in list_point[:A-1] or tmp in list_point[A:]:
 
-        if list_point[A-1] in list_point[:A-1] or list_point[A-1] in list_point[A:]:
-            out += 1
+    #現在の得点の一覧を更新
+    if list_point[A-1] in dic_point:
+        dic_point[list_point[A-1]] += 1
+    else:
+        dic_point[list_point[A-1]] = 1
+
+    #更新前の選手の得点が現在の得点の一覧にあるかどうか
+    if tmp in dic_point:
+        if dic_point[tmp] == 1:
+            dic_point.pop(tmp)
         else:
-            out += 1
-    #print(list_point)
-    #print(set(list_point))
-    print(len(set(list_point)))
+            dic_point[tmp] -= 1
 
-#★辞書を使って作り直す
+    print(len(dic_point))
