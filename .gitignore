@@ -1,3 +1,4 @@
 /python/trainingEnv/env
 __pycache__
 /python/DjangoEnv/env
+/python/trainingEnv/.venv
