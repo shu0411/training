@@ -1,7 +1,8 @@
-#TLE。dict_kindを作って、種類ごとにどの地域にいるか管理するように変更した。
+#WA
 def create_solution(step: int, n: int, m: int, q: int, query1: list[int], query2: list[int], query3: list[int]) -> list[int]:
     dict_area = {} #地域ごとに、その地域で発見されたポケモンの種類と数を記録
     dict_kind = {} #種類ごとに、そのポケモンがいる地域と数を記録
+    dict_total = [0] * (n+1) #地域ごとに、その地域で発見されたポケモンの総数を記録
     ans = []
     for i in range(q):
         if query3[i] != -1:
@@ -17,6 +18,8 @@ def create_solution(step: int, n: int, m: int, q: int, query1: list[int], query2
                 dict_kind[y][x] = 0
             dict_kind[y][x] += z
 
+            #dict_totalの更新
+            dict_total[x] += z
 
             #dict_areaの更新
             if x not in dict_area:
@@ -34,7 +37,7 @@ def create_solution(step: int, n: int, m: int, q: int, query1: list[int], query2
                 count = len(dict_area)
             elif a in dict_kind:
                 for area in dict_kind[a]:
-                    if dict_area[area][a] / sum(dict_area[area].values()) >= b / 100:
+                    if dict_area[area][a] / dict_total[area] >= b / 100:
                         count += 1
 
             ans.append(count)

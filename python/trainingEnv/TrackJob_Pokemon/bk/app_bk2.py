@@ -36,10 +36,6 @@ def create_solution(step: int, n: int, m: int, q: int, query1: list[int], query2
                 for area in dict_kind[a]:
                     if dict_area[area][a] / sum(dict_area[area].values()) >= b / 100:
                         count += 1
-            # else:
-            #     for key, value in dict_area.items():
-            #         if a in value and value[a] / sum(value.values()) >= b / 100:
-            #             count += 1
 
             ans.append(count)
 
