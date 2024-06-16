@@ -2,6 +2,7 @@ import logging
 
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib import messages
 from .forms import InquiryForm
 
 logger = logging.getLogger(__name__)    # ロガーの取得
@@ -17,6 +18,6 @@ class InquiryView(generic.FormView):
     # フォームのバリデーションを通過したときに呼ばれるメソッド(オーバーライド)
     def form_valid(self, form):
         form.send_email()   # メール送信
+        messages.success(self.request, 'メッセージを送信しました。')    # メッセージを画面に表示
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))   # ログ出力
         return super().form_valid(form)   # 元のform_validメソッドを呼び出し
-

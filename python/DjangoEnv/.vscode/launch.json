@@ -17,6 +17,7 @@
             "env": {
                 "DB_USER":"postgres",
                 "DB_PASSWORD":"0216shu0211",
+                "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
             },
         }
     ]
