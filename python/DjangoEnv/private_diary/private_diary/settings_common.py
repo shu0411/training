@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'allauth', # 追加
     'allauth.account', # 追加
 
-    'django.bootstrap5', # 追加
+    'django_bootstrap5', # 追加
 ]
 
 MIDDLEWARE = [
@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', # 追加
 ]
 
 ROOT_URLCONF = 'private_diary.urls'
