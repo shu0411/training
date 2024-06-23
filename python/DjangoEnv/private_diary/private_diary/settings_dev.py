@@ -43,4 +43,8 @@ LOGGING = {
     },
 }
 
+# メールバックエンドの設定
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#メディアファイルの配置場所
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')

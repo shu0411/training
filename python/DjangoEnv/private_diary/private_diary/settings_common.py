@@ -175,3 +175,9 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
 
 # デフォルトのメール送信元を設定
 DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
+
+# 画像配信時のルートURLの設定
+MEDIA_URL = '/media/'
+
+#ログイン後のリダイレクト先
+LOGIN_REDIRECT_URL = 'diary:dialy_list'
