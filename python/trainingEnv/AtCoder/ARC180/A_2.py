@@ -2,8 +2,8 @@ import io
 import sys
 
 _INPUT = """\
-100
-ABAABAABABBABAABAABAABABBABBABBABBABBABBABBABBABBABBABBABBABBABBABAABABAABABBABBABABBABAABAABAABAABA
+17
+BBABABAABABAAAABA
 """
 sys.stdin = io.StringIO(_INPUT)
 
@@ -29,13 +29,15 @@ while not q1.empty():
     if S[i:i+3] == "ABA":
         after_S = S[:i] + "A" + S[i+3:]
         q1.put([S,i+1])
-        q1.put([after_S, i])
-        set_S.add(after_S)
+        if after_S not in set_S:
+            q1.put([after_S, i])
+            set_S.add(after_S)
     elif S[i:i+3] == "BAB":
         after_S = S[:i] + "B" + S[i+3:]
         q1.put([S,i+1])
-        q1.put([after_S, i])
-        set_S.add(after_S)
+        if after_S not in set_S:
+            q1.put([after_S, i])
+            set_S.add(after_S)
     else:
         q1.put([S,i+1])
 
