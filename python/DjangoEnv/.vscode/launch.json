@@ -51,6 +51,38 @@
                 "DB_PASSWORD":"0216shu0211",
                 "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
             },
+        },
+        {
+            "name": "createsuperuser: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "createsuperuser"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\private_diary\\manage.py",
+            "env": {
+                "DB_USER":"postgres",
+                "DB_PASSWORD":"0216shu0211",
+                "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
+            },
+        },
+        {
+            "name": "showmigrations: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "showmigrations"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\private_diary\\manage.py",
+            "env": {
+                "DB_USER":"postgres",
+                "DB_PASSWORD":"0216shu0211",
+                "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
+            },
         }
     ]
 }
