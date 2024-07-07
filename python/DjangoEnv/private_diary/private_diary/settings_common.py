@@ -180,4 +180,4 @@ DEFAULT_FROM_EMAIL = os.environ.get('FROM_EMAIL')
 MEDIA_URL = '/media/'
 
 #ログイン後のリダイレクト先
-LOGIN_REDIRECT_URL = 'diary:dialy_list'
+LOGIN_REDIRECT_URL = 'diary:diary_list'
