@@ -83,6 +83,22 @@
                 "DB_PASSWORD":"0216shu0211",
                 "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
             },
+        },
+        {
+            "name": "deletemigrations(launch.json要編集): Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "migrate","diary","zero"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\private_diary\\manage.py",
+            "env": {
+                "DB_USER":"postgres",
+                "DB_PASSWORD":"0216shu0211",
+                "DJANGO_SETTINGS_MODULE":"private_diary.settings_dev"
+            },
         }
     ]
 }
