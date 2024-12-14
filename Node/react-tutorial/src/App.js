@@ -1,5 +1,12 @@
 import { useState } from "react";
 
+//今後やりたいこと
+//名前の入力フォームを作成
+//XOの表示を名前に変更
+//勝敗が決まった時に、勝者の名前を表示
+//盤面のサイズを変更できるようにする
+//勝敗の判定をハードコーディングから動的に変更できるようにする
+
 function Square({ value, onSquareClick }) {
   //  const [value, setValue] = useState(null);
   //
