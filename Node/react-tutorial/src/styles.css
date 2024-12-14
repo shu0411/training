@@ -38,6 +38,11 @@ h6 {
   font-size: 12px;
 }
 
+p {
+  margin-top: 0;
+  font-size: 12px;
+}
+
 code {
   font-size: 1.2em;
 }
@@ -73,13 +78,15 @@ body {
 
 .board-row:after {
   clear: both;
-  content: '';
+  content: "";
   display: table;
 }
 
 .status {
+  width: 130px;
   margin-bottom: 10px;
 }
+
 .game {
   display: flex;
   flex-direction: row;
