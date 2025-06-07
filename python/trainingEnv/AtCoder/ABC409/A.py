@@ -2,8 +2,10 @@ import io
 import sys
 
 _INPUT = """\
-2
-1 2 3
+5
+xxxxx
+ooooo
+
 """
 sys.stdin = io.StringIO(_INPUT)
 
@@ -11,10 +13,15 @@ sys.stdin = io.StringIO(_INPUT)
 
 #入力
 N = int(input())
-list_S = input().split()
+T = input()
+A = input()
 
 #処理
-out = N
+out = 'No'
+for i in range(N):
+    if T[i] == 'o' and A[i] == 'o':
+        out = 'Yes'
+        break
 
 #出力
 print(out)
