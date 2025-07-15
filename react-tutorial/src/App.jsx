@@ -49,8 +49,8 @@ function Board({ xIsNext, squares, onPlay }) {
   //行数、列数を定義
   //const rows = Array(3).keys(); //Emptyの配列を使うので、非効率らしい
   //const cols = [0,1,2];
-  let rows;
-  let cols;
+  let rows = [];
+  let cols = [];
   for (let i = 0; i < 3; i++) {
     rows.push(i);
     cols.push(i);
