@@ -29,7 +29,7 @@ for _ in range(Q):
     list_query.append(query)
 
 now_server = "0"
-now_str_rev = ""
+list_now_str_rev = []
 #クエリをさかのぼって文字列のリストを生成
 for query in list_query[::-1]:
     if query[0] == "1":
@@ -39,14 +39,14 @@ for query in list_query[::-1]:
     elif query[0] == "2":
         #PCpの末尾に文字列を追加
         if now_server == query[1]:
-            now_str_rev += query[2][::-1]   #←文字列連結を繰り返すためTLEになっている
-        
+            list_now_str_rev.append(query[2])
+
     elif query[0] == "3":
         #サーバーをPCpで置き換え
         if now_server == "0":
             now_server = query[1]
 
 #出力
-out_str = now_str_rev[::-1]
+out_str = "".join(list_now_str_rev[::-1])
 
 print(out_str)
