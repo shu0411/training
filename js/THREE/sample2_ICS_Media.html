@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+        background-color: #ccc;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.175.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from 'three'
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+      // サイズを指定
+      const width = window.innerWidth
+      const height = window.innerHeight
+
+      // レンダラーを作成
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector('#myCanvas'),
+      })
+      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setSize(width, height)
+
+      // シーンを作成
+      const scene = new THREE.Scene()
+
+      // カメラを作成
+      const camera = new THREE.PerspectiveCamera(60, width / height)
+      camera.position.set(0, 0, +1000)
+
+      // コントロール：カメラをマウスで操作できるようにする
+      const controls = new OrbitControls(camera, renderer.domElement)
+      controls.enableDamping = true
+
+      // 箱を作成
+      const geometry = new THREE.BoxGeometry(400, 400, 400) //1辺400の箱のジオメトリ
+      const material = new THREE.MeshNormalMaterial() //適当な色をつけるマテリアル
+      const box = new THREE.Mesh(geometry, material)
+      scene.add(box)
+
+      tick()
+
+      // 毎フレーム時に実行されるループイベントです
+      function tick() {
+        box.rotation.x += 0.01
+        box.rotation.y += 0.01
+        renderer.render(scene, camera) // レンダリング
+
+        requestAnimationFrame(tick) // 次のフレームを要求
+      }
+    </script>
+  </body>
+</html>

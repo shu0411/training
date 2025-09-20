@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>THREE.js Demo</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from 'three'
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+      // シーンなどの設定
+      const scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+      const renderer = new THREE.WebGLRenderer({ antialias: true })
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.shadowMap.enabled = true
+      document.body.appendChild(renderer.domElement)
+
+      // ライト
+      const light = new THREE.DirectionalLight(0xffffff, 1)
+      light.position.set(5, 10, 5)
+      light.castShadow = true
+      scene.add(light)
+
+      // 地面
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x999999 }))
+      ground.rotation.x = -Math.PI / 2
+      ground.receiveShadow = true
+      scene.add(ground)
+
+      // キューブ
+      const geometry = new THREE.BoxGeometry()
+      const material = new THREE.MeshStandardMaterial({ color: 0x44aa88 })
+      const cube = new THREE.Mesh(geometry, material)
+      cube.castShadow = true
+      cube.position.y = 0.5
+      scene.add(cube)
+
+      // カメラ位置
+      camera.position.set(2, 2, 5)
+
+      // コントロール
+      const controls = new OrbitControls(camera, renderer.domElement)
+      controls.enableDamping = true
+
+      // アニメーションループ
+      function animate() {
+        requestAnimationFrame(animate)
+        cube.rotation.x += 0.01
+        cube.rotation.y += 0.01
+        controls.update()
+        renderer.render(scene, camera)
+      }
+      animate()
+
+      // リサイズ対応
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+      })
+    </script>
+  </body>
+</html>
