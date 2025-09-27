@@ -1,0 +1,29 @@
+import io
+import sys
+
+_INPUT = """\
+9 9
+.........
+.........
+.........
+.........
+....#....
+.........
+.........
+.........
+.........
+
+"""
+sys.stdin = io.StringIO(_INPUT)
+
+#############ここから下をコピペ#############
+
+#入力
+H,W = map(int, input().split())
+list_S = [input() for _ in range(H)]
+
+#処理
+out = 0
+
+#出力
+print(out)
