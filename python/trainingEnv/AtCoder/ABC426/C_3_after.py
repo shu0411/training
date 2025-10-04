@@ -31,3 +31,6 @@ for _ in range(Q):
     
     #出力
     print(count)
+
+# TLEになっていた理由：min_valueより小さいkeyのものを0にする処理が余計。
+# →min_valueを更新しておけば、次回以降のループでスキップするため、そのまま放置で良い。
