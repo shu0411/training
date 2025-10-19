@@ -55,17 +55,19 @@ for _ in range(T):
     dp[K * 2] = [False] + [(s == "A") for s in S]
 
     for i in range(K * 2 - 1, -1, -1):
+        tmp_dp = [False] * (N + 1)
         for u in range(1, N + 1):
             for v in dic_edge[u]:
                 if not dp[i + 1][v]:
-                    dp[i][u] = True
+                    tmp_dp[u] = True
                     break
+        dp[i] = tmp_dp
 
     out = ""
     if dp[0][1]:
-        out = "Bob"
-    else:
         out = "Alice"
+    else:
+        out = "Bob"
 
     # 出力
     print(out)
