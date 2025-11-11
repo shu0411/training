@@ -14,7 +14,7 @@ config/name="Pong-with-Csharp"
 config/description="A simple Pong game. This demo shows best practices
 for game development in Godot, including signals."
 config/tags=PackedStringArray("2d", "demo", "official")
-run/main_scene="pong.tscn"
+run/main_scene="uid://ddn52yipfk1a3"
 config/features=PackedStringArray("4.5", "C#")
 config/icon="res://icon.webp"
 
