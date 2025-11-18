@@ -16,7 +16,7 @@
             "request": "launch",
             "mode": "executable",
             "preLaunchTask": "build",
-            "executable": "<insert-godot-executable-path-here>",
+            "executable": "C:\\Program Files\\Godot_v4.5-stable_mono_win64\\Godot_v4.5-stable_mono_win64_console.exe",
             "executableArguments": [
                 "--path",
                 "${workspaceRoot}"
@@ -28,7 +28,7 @@
             "request": "launch",
             "mode": "executable",
             "preLaunchTask": "build",
-            "executable": "<insert-godot-executable-path-here>",
+            "executable": "C:\\Program Files\\Godot_v4.5-stable_mono_win64\\Godot_v4.5-stable_mono_win64_console.exe",
             "executableArguments": [
                 "--path",
                 "${workspaceRoot}",
