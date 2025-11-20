@@ -9,12 +9,6 @@ public partial class Main : Node
 
 	private int _score = 0;
 
-	public void GameOver()
-	{
-		GetNode<Timer>("MobTimer").Stop();
-		GetNode<Timer>("ScoreTimer").Stop();
-	}
-
 	public void NewGame()
 	{
 		_score = 0;
@@ -23,6 +17,19 @@ public partial class Main : Node
 		player.Start(startPosition.Position);
 
 		GetNode<Timer>("StartTimer").Start();
+
+		var hud = GetNode<Hud>("HUD");
+		hud.UpdateScore(_score);
+		hud.ShowMessage("Get Ready!");
+	}
+
+	public void GameOver()
+	{
+		GetNode<Timer>("MobTimer").Stop();
+		GetNode<Timer>("ScoreTimer").Stop();
+
+		var hud = GetNode<Hud>("HUD");
+		hud.ShowGameOver();
 	}
 
 	private void OnMobTimerTimeout()
@@ -46,12 +53,13 @@ public partial class Main : Node
 
 		//Nodeの子としてモブを追加
 		AddChild(mob);
-
 	}
 
 	private void OnScoreTimerTimeout()
 	{
 		_score++;
+		var hud = GetNode<Hud>("HUD");
+		hud.UpdateScore(_score);
 	}
 
 	private void OnStartTimerTimeout()
@@ -63,7 +71,6 @@ public partial class Main : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		NewGame();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
