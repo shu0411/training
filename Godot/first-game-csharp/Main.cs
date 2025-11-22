@@ -21,6 +21,8 @@ public partial class Main : Node
 		var hud = GetNode<Hud>("HUD");
 		hud.UpdateScore(_score);
 		hud.ShowMessage("Get Ready!");
+
+		GetNode<AudioStreamPlayer>("Music").Play();
 	}
 
 	public void GameOver()
@@ -30,6 +32,9 @@ public partial class Main : Node
 
 		var hud = GetNode<Hud>("HUD");
 		hud.ShowGameOver();
+
+		GetNode<AudioStreamPlayer>("Music").Stop();
+		GetNode<AudioStreamPlayer>("DeathSound").Play();
 	}
 
 	private void OnMobTimerTimeout()
