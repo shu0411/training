@@ -16,7 +16,7 @@ list_A = list(map(int, input().split()))
 
 # 処理
 # 下の数字の桁数ごとに上の数字をMで割った余りを記録
-list_dic_rem_Ai = [[]]
+list_dic_rem_Ai = [{}]
 for i in range(1, 11):
     tmp_dic_rem_Ai = {}
     for A in list_A:
