@@ -2,7 +2,7 @@ import io
 import sys
 
 _INPUT = """\
-7 5 11
+7 5 9
 5 6 7 8 9 10 11
 
 """
@@ -15,12 +15,12 @@ N, K, X = map(int, input().split())
 list_A = list(map(int, input().split()))
 
 # 処理
-list_A.sort()
+list_A.sort(reverse=True)
 min_need_sake_count = 0
 tmp_sake_ml = 0
 tmp_sake_count = 0
 out = 0
-for A in list_A:
+for A in list_A[(N - K) :]:
     tmp_sake_ml += A
     tmp_sake_count += 1
     if tmp_sake_ml >= X:
