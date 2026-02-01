@@ -2,19 +2,14 @@ import io
 import sys
 
 _INPUT = """\
-2
-1 2 3
+http
+
 """
 sys.stdin = io.StringIO(_INPUT)
 
 #############ここから下をコピペ#############
 
-# 入力
-N = int(input())
-list_S = input().split()
+S = input()
 
-# 処理
-out = N
-
-# 出力
+out = S + "s"
 print(out)

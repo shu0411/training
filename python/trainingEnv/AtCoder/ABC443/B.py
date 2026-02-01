@@ -2,19 +2,19 @@ import io
 import sys
 
 _INPUT = """\
-2
-1 2 3
+4 43
+
 """
 sys.stdin = io.StringIO(_INPUT)
 
 #############ここから下をコピペ#############
 
-# 入力
-N = int(input())
-list_S = input().split()
+N, K = map(int, input().split())
 
-# 処理
-out = N
+age = N
+count = 0
+while count < K:
+    count += age
+    age += 1
 
-# 出力
-print(out)
+print(age - 1 - N)
