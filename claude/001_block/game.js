@@ -14,6 +14,7 @@ const BLOCK_OFFSET_X = (W - (COLS * (BLOCK_W + BLOCK_PAD) - BLOCK_PAD)) / 2;
 const BLOCK_OFFSET_Y = 60;
 const ROW_COLORS = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#3498db'];
 const ROW_SCORES = [50, 40, 30, 20, 10];
+const BOSS_HP_BY_ROW = [3, 2, 3, 1, 3]; // ボス各行のHP
 
 // パドル・ボール固定値
 const PADDLE_H = 12;
@@ -29,11 +30,9 @@ const LEVEL_CONFIG = [
 ];
 
 // 盤面レイアウト (1=ブロック, 0=空き)
-// Lv1: 各600点  Lv2: 各840点  Lv3(ボス): 1040点
 const LEVEL_LAYOUTS = [
   // --- Lv1 ---
   [
-    // ダイヤモンド (2-4-8-4-2)
     [
       [0,0,0,1,1,0,0,0],
       [0,0,1,1,1,1,0,0],
@@ -41,7 +40,6 @@ const LEVEL_LAYOUTS = [
       [0,0,1,1,1,1,0,0],
       [0,0,0,1,1,0,0,0],
     ],
-    // チェッカー (4-4-4-4-4)
     [
       [1,0,1,0,1,0,1,0],
       [0,1,0,1,0,1,0,1],
@@ -49,7 +47,6 @@ const LEVEL_LAYOUTS = [
       [0,1,0,1,0,1,0,1],
       [1,0,1,0,1,0,1,0],
     ],
-    // 砂時計 (2-4-8-4-2 両端)
     [
       [1,0,0,0,0,0,0,1],
       [1,1,0,0,0,0,1,1],
@@ -60,7 +57,6 @@ const LEVEL_LAYOUTS = [
   ],
   // --- Lv2 ---
   [
-    // 大ダイヤモンド (4-6-8-6-4)
     [
       [0,0,1,1,1,1,0,0],
       [0,1,1,1,1,1,1,0],
@@ -68,7 +64,6 @@ const LEVEL_LAYOUTS = [
       [0,1,1,1,1,1,1,0],
       [0,0,1,1,1,1,0,0],
     ],
-    // ウィング (4-6-8-6-4 翼型)
     [
       [0,0,1,1,1,1,0,0],
       [1,1,0,1,1,0,1,1],
@@ -76,7 +71,6 @@ const LEVEL_LAYOUTS = [
       [1,1,0,1,1,0,1,1],
       [0,0,1,1,1,1,0,0],
     ],
-    // 城壁 (4-8-8-4-0)
     [
       [1,0,1,0,1,0,1,0],
       [1,1,1,1,1,1,1,1],
@@ -85,9 +79,8 @@ const LEVEL_LAYOUTS = [
       [0,0,0,0,0,0,0,0],
     ],
   ],
-  // --- Lv3 ボス (固定1種) ---
+  // --- Lv3 ボス ---
   [
-    // ボスフェイス (8-6-8-4-8)
     [
       [1,1,1,1,1,1,1,1],
       [1,0,1,1,1,1,0,1],
@@ -99,22 +92,42 @@ const LEVEL_LAYOUTS = [
 ];
 
 // ゲーム状態
-let state; // 'idle'|'playing'|'paused'|'dead'|'levelup'|'gameover'|'gameclear'
+let state;
 let score, lives, level, blocks, paddle, ball, speed, paddleW, pauseMenuIndex;
 const keys = {};
 
+// ボス専用状態
+let bossHpTotal = 0;
+let bossEnraged = false;
+let shakeTimer = 0;
+let enrageFlashAlpha = 0;
+let bossOscTime = 0;
+
 function buildBlocks(layout) {
   blocks = [];
+  bossHpTotal = 0;
+  bossEnraged = false;
+  enrageFlashAlpha = 0;
+  bossOscTime = 0;
+  shakeTimer = 0;
+  const isBoss = (level === 3);
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       if (!layout[r][c]) continue;
+      const maxHp = isBoss ? BOSS_HP_BY_ROW[r] : 1;
+      const baseX = BLOCK_OFFSET_X + c * (BLOCK_W + BLOCK_PAD);
       blocks.push({
-        x: BLOCK_OFFSET_X + c * (BLOCK_W + BLOCK_PAD),
+        x: baseX,
         y: BLOCK_OFFSET_Y + r * (BLOCK_H + BLOCK_PAD),
+        baseX,
         w: BLOCK_W, h: BLOCK_H,
         color: ROW_COLORS[r], score: ROW_SCORES[r],
         alive: true,
+        hp: maxHp, maxHp,
+        row: r,
+        oscillates: isBoss && (r === 0 || r === 4),
       });
+      if (isBoss) bossHpTotal += maxHp;
     }
   }
 }
@@ -159,11 +172,11 @@ document.addEventListener('keydown', e => {
   keys[e.code] = true;
 
   if (e.code === 'Space') {
-    if (state === 'idle')      { startLevel(1); }
-    else if (state === 'dead') { resetBall(); state = 'playing'; }
-    else if (state === 'levelup')   { startLevel(level + 1); }
-    else if (state === 'gameover')  { initGame(); }
-    else if (state === 'gameclear') { initGame(); }
+    if (state === 'idle')          { startLevel(1); }
+    else if (state === 'dead')     { resetBall(); state = 'playing'; }
+    else if (state === 'levelup')  { startLevel(level + 1); }
+    else if (state === 'gameover') { initGame(); }
+    else if (state === 'gameclear'){ initGame(); }
   }
 
   if (e.code === 'Escape') {
@@ -187,8 +200,35 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('keyup', e => { keys[e.code] = false; });
 
+function updateBoss() {
+  if (level !== 3 || state !== 'playing') return;
+
+  if (shakeTimer > 0) shakeTimer--;
+  if (enrageFlashAlpha > 0) enrageFlashAlpha = Math.max(0, enrageFlashAlpha - 0.015);
+
+  // ブロック振動 (行0と行4が逆位相で揺れる)
+  bossOscTime += bossEnraged ? 0.045 : 0.022;
+  for (const b of blocks) {
+    if (!b.alive || !b.oscillates) continue;
+    const phase = b.row === 0 ? 0 : Math.PI;
+    b.x = b.baseX + Math.sin(bossOscTime + phase) * 18;
+  }
+
+  // エンレイジ判定 (HP40%以下)
+  if (!bossEnraged) {
+    const hpLeft = blocks.reduce((s, b) => s + (b.alive ? b.hp : 0), 0);
+    if (hpLeft <= Math.floor(bossHpTotal * 0.4)) {
+      bossEnraged = true;
+      enrageFlashAlpha = 0.75;
+      speed = Math.max(speed, LEVEL_CONFIG[2].baseSpeed * 1.45);
+    }
+  }
+}
+
 function update() {
   if (state !== 'playing') return;
+
+  updateBoss();
 
   speed += LEVEL_CONFIG[level - 1].speedInc;
 
@@ -196,7 +236,7 @@ function update() {
   if (keys['ArrowLeft'] || keys['KeyA']) paddle.x = Math.max(0, paddle.x - PADDLE_SPEED);
   if (keys['ArrowRight'] || keys['KeyD']) paddle.x = Math.min(W - paddleW, paddle.x + PADDLE_SPEED);
 
-  // ボール移動 (速度を一定に保つ)
+  // ボール移動
   const spd = Math.hypot(ball.dx, ball.dy);
   ball.dx = ball.dx / spd * speed;
   ball.dy = ball.dy / spd * speed;
@@ -242,9 +282,14 @@ function update() {
       ball.x + BALL_R > b.x && ball.x - BALL_R < b.x + b.w &&
       ball.y + BALL_R > b.y && ball.y - BALL_R < b.y + b.h
     ) {
-      b.alive = false;
-      score += b.score;
-      // 進行方向から入ってきた辺のオーバーラップだけを比較して正確に反射面を決定
+      b.hp--;
+      if (b.hp <= 0) {
+        b.alive = false;
+        score += b.score;
+        if (level === 3) shakeTimer = Math.max(shakeTimer, 10);
+      } else {
+        if (level === 3) shakeTimer = Math.max(shakeTimer, 5);
+      }
       const hOverlap = ball.dx > 0
         ? (ball.x + BALL_R) - b.x
         : (b.x + b.w) - (ball.x - BALL_R);
@@ -265,30 +310,78 @@ function update() {
 
 function draw() {
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = (level === 3 && state === 'playing') ? '#1a0000' : '#1a1a2e';
+
+  const isBossActive = level === 3 && (state === 'playing' || state === 'dead' || state === 'paused');
+
+  // 背景
+  ctx.fillStyle = isBossActive ? '#1a0000' : '#1a1a2e';
   ctx.fillRect(0, 0, W, H);
 
-  // ブロック
+  // ボス背景グリッド
+  if (isBossActive) {
+    ctx.strokeStyle = 'rgba(180,0,0,0.07)';
+    ctx.lineWidth = 1;
+    for (let gx = 0; gx < W; gx += 40) {
+      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+    }
+    for (let gy = 0; gy < H; gy += 40) {
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+    }
+  }
+
+  // スクリーンシェイク
+  const sx = (level === 3 && shakeTimer > 0) ? (Math.random() - 0.5) * 7 : 0;
+  const sy = (level === 3 && shakeTimer > 0) ? (Math.random() - 0.5) * 7 : 0;
+  ctx.save();
+  ctx.translate(sx, sy);
+
+  // ブロック描画
   for (const b of blocks) {
     if (!b.alive) continue;
     ctx.fillStyle = b.color;
     ctx.fillRect(b.x, b.y, b.w, b.h);
+
+    // ダメージ表現 (ボスのみ)
+    if (b.maxHp > 1) {
+      const crackCount = b.maxHp - b.hp;
+      if (crackCount > 0) {
+        ctx.fillStyle = `rgba(0,0,0,${crackCount * 0.25})`;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 1.5;
+        if (crackCount >= 1) {
+          ctx.beginPath();
+          ctx.moveTo(b.x + b.w * 0.35, b.y + 2);
+          ctx.lineTo(b.x + b.w * 0.55, b.y + b.h - 2);
+          ctx.stroke();
+        }
+        if (crackCount >= 2) {
+          ctx.beginPath();
+          ctx.moveTo(b.x + b.w * 0.65, b.y + 2);
+          ctx.lineTo(b.x + b.w * 0.8, b.y + b.h - 2);
+          ctx.stroke();
+        }
+      }
+    }
+
     ctx.strokeStyle = 'rgba(0,0,0,0.3)';
     ctx.lineWidth = 1;
     ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1);
   }
 
   // パドル
-  ctx.fillStyle = '#ecf0f1';
+  ctx.fillStyle = (bossEnraged && level === 3) ? '#ff6b6b' : '#ecf0f1';
   ctx.beginPath();
   ctx.roundRect(paddle.x, paddle.y, paddleW, PADDLE_H, 6);
   ctx.fill();
 
   // ボール
-  ctx.fillStyle = '#ecf0f1';
+  ctx.fillStyle = (bossEnraged && level === 3) ? '#ff4444' : '#ecf0f1';
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
   ctx.fill();
+
+  ctx.restore(); // シェイク終了
 
   // UI: スコア / レベル / ライフ
   ctx.font = '16px monospace';
@@ -297,12 +390,13 @@ function draw() {
   ctx.fillText(`SCORE: ${score}`, 12, 22);
 
   ctx.textAlign = 'center';
-  if (level === 3 && state === 'playing') {
-    ctx.fillStyle = '#e74c3c';
+  if (isBossActive) {
+    ctx.fillStyle = bossEnraged ? '#ff4444' : '#e74c3c';
     ctx.font = 'bold 16px monospace';
-    ctx.fillText('FINAL BOSS', W / 2, 22);
+    ctx.fillText(bossEnraged ? '★ ENRAGED ★' : 'FINAL BOSS', W / 2, 22);
   } else {
     ctx.fillStyle = '#ecf0f1';
+    ctx.font = '16px monospace';
     ctx.fillText(`LEVEL ${level}`, W / 2, 22);
   }
 
@@ -310,6 +404,34 @@ function draw() {
   ctx.fillStyle = '#ecf0f1';
   ctx.font = '16px monospace';
   ctx.fillText(`LIFE: ${'♥'.repeat(lives)}`, W - 12, 22);
+
+  // ボスHPバー
+  if (isBossActive) {
+    const hpLeft = blocks.reduce((s, b) => s + (b.alive ? b.hp : 0), 0);
+    const ratio = bossHpTotal > 0 ? hpLeft / bossHpTotal : 0;
+    const barX = 12, barY = 33, barW = W - 24, barH = 7;
+    ctx.fillStyle = '#2c0000';
+    ctx.fillRect(barX, barY, barW, barH);
+    ctx.fillStyle = bossEnraged
+      ? `hsl(${Math.floor(Date.now() / 80) % 30}, 100%, 55%)`
+      : `hsl(${Math.floor(ratio * 40)}, 90%, 45%)`;
+    ctx.fillRect(barX, barY, barW * ratio, barH);
+    ctx.strokeStyle = '#550000';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(barX, barY, barW, barH);
+  }
+
+  // エンレイジフラッシュ
+  if (enrageFlashAlpha > 0) {
+    ctx.fillStyle = `rgba(200,0,0,${enrageFlashAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+    if (enrageFlashAlpha > 0.3) {
+      ctx.fillStyle = `rgba(255,255,255,${(enrageFlashAlpha - 0.3) / 0.45})`;
+      ctx.font = 'bold 52px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('ENRAGED!', W / 2, H / 2);
+    }
+  }
 
   // オーバーレイ
   if (state === 'idle') {
@@ -319,13 +441,47 @@ function draw() {
   } else if (state === 'gameover') {
     drawOverlay('GAME OVER', `SCORE: ${score}\nスペースキーでリスタート`);
   } else if (state === 'levelup') {
-    const nextTitle = level + 1 === 3 ? 'FINAL BOSS' : `LEVEL ${level + 1}`;
-    drawOverlay(`LEVEL ${level} CLEAR!`, `SCORE: ${score}\n\n次は ${nextTitle}\nスペースキーで挑戦`);
+    if (level + 1 === 3) {
+      drawBossWarning();
+    } else {
+      drawOverlay(`LEVEL ${level} CLEAR!`, `SCORE: ${score}\n\n次は LEVEL ${level + 1}\nスペースキーで挑戦`);
+    }
   } else if (state === 'gameclear') {
     drawOverlay('ALL CLEAR!!', `全ステージ制覇!\nFINAL SCORE: ${score}\nスペースキーでタイトルへ`);
   } else if (state === 'paused') {
     drawPauseMenu();
   }
+}
+
+function drawBossWarning() {
+  ctx.fillStyle = 'rgba(0,0,0,0.88)';
+  ctx.fillRect(0, 0, W, H);
+
+  // 赤いラインで縁取り
+  ctx.strokeStyle = '#e74c3c';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(8, 8, W - 16, H - 16);
+  ctx.strokeStyle = 'rgba(231,76,60,0.3)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(16, 16, W - 32, H - 32);
+
+  ctx.fillStyle = '#e74c3c';
+  ctx.font = 'bold 18px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('⚠  WARNING  ⚠', W / 2, H / 2 - 80);
+
+  ctx.fillStyle = '#ff4444';
+  ctx.font = 'bold 40px monospace';
+  ctx.fillText('FINAL BOSS', W / 2, H / 2 - 30);
+
+  ctx.fillStyle = '#ecf0f1';
+  ctx.font = '17px monospace';
+  ctx.fillText('最後の強敵が待ち受ける...', W / 2, H / 2 + 18);
+  ctx.fillText(`現在のスコア: ${score}`, W / 2, H / 2 + 50);
+
+  ctx.fillStyle = '#f1c40f';
+  ctx.font = 'bold 18px monospace';
+  ctx.fillText('スペースキーで挑戦', W / 2, H / 2 + 95);
 }
 
 function drawOverlay(title, sub) {
