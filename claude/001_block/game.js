@@ -27,8 +27,8 @@ const BASE_SPEED = 4;
 const SPEED_INCREMENT = 0.0005;
 
 // ゲーム状態
-let state; // 'idle' | 'playing' | 'dead' | 'gameover' | 'clear'
-let score, lives, blocks, paddle, ball, speed, animId;
+let state; // 'idle' | 'playing' | 'paused' | 'dead' | 'gameover' | 'clear'
+let score, lives, blocks, paddle, ball, speed, animId, pauseMenuIndex;
 const keys = {};
 
 function initGame() {
@@ -77,20 +77,38 @@ document.addEventListener('keydown', e => {
       initGame();
     }
   }
-  if (['ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+  if (e.code === 'Escape') {
+    if (state === 'playing') { state = 'paused'; pauseMenuIndex = 0; }
+    else if (state === 'paused') state = 'playing';
+  }
+  if (state === 'paused') {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+      pauseMenuIndex = (pauseMenuIndex - 1 + 3) % 3;
+    }
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+      pauseMenuIndex = (pauseMenuIndex + 1) % 3;
+    }
+    if (e.code === 'Space') {
+      if (pauseMenuIndex === 0) state = 'playing';
+      else if (pauseMenuIndex === 1) { initGame(); state = 'playing'; }
+      else if (pauseMenuIndex === 2) initGame();
+    }
+  }
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
     e.preventDefault();
   }
 });
 document.addEventListener('keyup', e => { keys[e.code] = false; });
 
 function update() {
-  if (state !== 'playing') return;
+  if (state !== 'playing' && state !== 'paused') return;
+  if (state === 'paused') return;
 
   speed += SPEED_INCREMENT;
 
   // パドル移動
-  if (keys['ArrowLeft']) paddle.x = Math.max(0, paddle.x - PADDLE_SPEED);
-  if (keys['ArrowRight']) paddle.x = Math.min(W - PADDLE_W, paddle.x + PADDLE_SPEED);
+  if (keys['ArrowLeft'] || keys['KeyA']) paddle.x = Math.max(0, paddle.x - PADDLE_SPEED);
+  if (keys['ArrowRight'] || keys['KeyD']) paddle.x = Math.min(W - PADDLE_W, paddle.x + PADDLE_SPEED);
 
   // ボール移動
   const spd = Math.hypot(ball.dx, ball.dy);
@@ -211,6 +229,8 @@ function draw() {
     drawOverlay('GAME OVER', `SCORE: ${score}\nスペースキーでリスタート`);
   } else if (state === 'clear') {
     drawOverlay('CLEAR!', `SCORE: ${score}\nスペースキーでリスタート`);
+  } else if (state === 'paused') {
+    drawPauseMenu();
   }
 }
 
@@ -229,6 +249,31 @@ function drawOverlay(title, sub) {
   lines.forEach((line, i) => {
     ctx.fillText(line, W / 2, H / 2 + 20 + i * 28);
   });
+}
+
+function drawPauseMenu() {
+  ctx.fillStyle = 'rgba(0,0,0,0.65)';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = '#f1c40f';
+  ctx.font = 'bold 36px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('PAUSE', W / 2, H / 2 - 70);
+
+  const items = ['ゲームを続ける', '最初からやり直す', 'タイトルに戻る'];
+  items.forEach((label, i) => {
+    const selected = i === pauseMenuIndex;
+    const y = H / 2 - 5 + i * 44;
+    ctx.font = selected ? 'bold 20px monospace' : '20px monospace';
+    ctx.fillStyle = selected ? '#f1c40f' : '#7f8c8d';
+    ctx.textAlign = 'center';
+    ctx.fillText((selected ? '▶  ' : '   ') + label, W / 2, y);
+  });
+
+  ctx.fillStyle = '#555';
+  ctx.font = '13px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('↑↓ / W S で選択   Space で確定', W / 2, H / 2 + 125);
 }
 
 function loop() {
