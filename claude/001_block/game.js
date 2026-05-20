@@ -122,8 +122,8 @@ function buildBlocks(layout) {
 function resetBall() {
   const angle = (Math.random() * 60 + 60) * (Math.PI / 180);
   ball = {
-    x: W / 2,
-    y: PADDLE_Y - BALL_R - 1,
+    x: paddle.x + paddleW / 2,
+    y: paddle.y - BALL_R - 1,
     dx: speed * Math.cos(angle) * (Math.random() < 0.5 ? 1 : -1),
     dy: -speed * Math.sin(angle),
   };
@@ -244,9 +244,14 @@ function update() {
     ) {
       b.alive = false;
       score += b.score;
-      const ol = (ball.x + BALL_R) - b.x, or = (b.x + b.w) - (ball.x - BALL_R);
-      const ot = (ball.y + BALL_R) - b.y, ob = (b.y + b.h) - (ball.y - BALL_R);
-      if (Math.min(ol, or) < Math.min(ot, ob)) ball.dx = -ball.dx;
+      // 進行方向から入ってきた辺のオーバーラップだけを比較して正確に反射面を決定
+      const hOverlap = ball.dx > 0
+        ? (ball.x + BALL_R) - b.x
+        : (b.x + b.w) - (ball.x - BALL_R);
+      const vOverlap = ball.dy > 0
+        ? (ball.y + BALL_R) - b.y
+        : (b.y + b.h) - (ball.y - BALL_R);
+      if (hOverlap < vOverlap) ball.dx = -ball.dx;
       else ball.dy = -ball.dy;
       break;
     }
