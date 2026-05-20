@@ -105,11 +105,19 @@ canvas {
 
 .overlay.hidden {
   opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-panel {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  width: min(360px, 92%);
 }
 
 .status-text {
   margin: 0;
-  max-width: 80%;
+  max-width: 100%;
   padding: 14px 18px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
@@ -118,6 +126,38 @@ canvas {
   font-size: 1.45rem;
   font-weight: 700;
   text-align: center;
+}
+
+.pause-menu {
+  display: grid;
+  gap: 10px;
+  pointer-events: auto;
+  width: min(260px, 100%);
+}
+
+.pause-menu.hidden {
+  display: none;
+}
+
+.pause-button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(38, 45, 56, 0.94);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.pause-button:hover,
+.pause-button:focus-visible,
+.pause-button.is-selected {
+  border-color: var(--accent);
+  background: rgba(66, 209, 164, 0.18);
+  outline: none;
 }
 
 @media (max-width: 640px) {
@@ -148,5 +188,10 @@ canvas {
   .status-text {
     max-width: 90%;
     font-size: 1rem;
+  }
+
+  .pause-button {
+    min-height: 42px;
+    font-size: 0.95rem;
   }
 }

@@ -19,7 +19,14 @@
     <section class="board-wrap">
       <canvas id="gameCanvas" width="800" height="520" aria-label="ゲーム画面"></canvas>
       <div id="overlay" class="overlay">
-        <p id="statusText" class="status-text">Press Space or Click to Start</p>
+        <div class="overlay-panel">
+          <p id="statusText" class="status-text">Press Space or Click to Start</p>
+          <div id="pauseMenu" class="pause-menu hidden" role="menu" aria-label="Pause menu">
+            <button class="pause-button" type="button" data-action="resume" role="menuitem">Resume</button>
+            <button class="pause-button" type="button" data-action="restart" role="menuitem">Restart</button>
+            <button class="pause-button" type="button" data-action="quit" role="menuitem">Quit</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>

@@ -4,6 +4,8 @@ const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const overlay = document.getElementById("overlay");
 const statusText = document.getElementById("statusText");
+const pauseMenu = document.getElementById("pauseMenu");
+const pauseButtons = Array.from(document.querySelectorAll(".pause-button"));
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
@@ -32,6 +34,7 @@ let keys = new Set();
 let bricks = [];
 let paddle;
 let ball;
+let selectedPauseIndex = 0;
 
 function createBricks() {
   bricks = [];
@@ -68,13 +71,17 @@ function resetPositions() {
   };
 }
 
-function resetGame() {
+function resetGameState() {
   score = 0;
   lives = START_LIVES;
   state = "ready";
   createBricks();
   resetPositions();
   updateHud();
+}
+
+function resetGame() {
+  resetGameState();
   showMessage("Press Space or Click to Start");
   draw();
 }
@@ -86,6 +93,7 @@ function updateHud() {
 
 function showMessage(message) {
   statusText.textContent = message;
+  hidePauseMenu();
   overlay.classList.remove("hidden");
 }
 
@@ -93,8 +101,24 @@ function hideMessage() {
   overlay.classList.add("hidden");
 }
 
+function showPauseMenu() {
+  statusText.textContent = "Paused";
+  selectedPauseIndex = 0;
+  pauseMenu.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+  updatePauseSelection();
+}
+
+function hidePauseMenu() {
+  pauseMenu.classList.add("hidden");
+  pauseButtons.forEach((button) => {
+    button.classList.remove("is-selected");
+    button.setAttribute("tabindex", "-1");
+  });
+}
+
 function startGame() {
-  if (state === "playing") {
+  if (state === "playing" || state === "paused") {
     return;
   }
 
@@ -105,6 +129,46 @@ function startGame() {
   state = "playing";
   hideMessage();
   runLoop();
+}
+
+function togglePause() {
+  if (state === "playing") {
+    state = "paused";
+    keys.clear();
+    if (animationId !== null) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+    showPauseMenu();
+    draw();
+    return;
+  }
+
+  if (state === "paused") {
+    resumeGame();
+  }
+}
+
+function resumeGame() {
+  if (state !== "paused") {
+    return;
+  }
+
+  state = "playing";
+  hideMessage();
+  runLoop();
+}
+
+function restartGame() {
+  resetGameState();
+  state = "playing";
+  hideMessage();
+  draw();
+  runLoop();
+}
+
+function quitToTitle() {
+  resetGame();
 }
 
 function runLoop() {
@@ -121,6 +185,8 @@ function loop() {
 
   if (state === "playing") {
     animationId = requestAnimationFrame(loop);
+  } else {
+    animationId = null;
   }
 }
 
@@ -184,8 +250,8 @@ function collideWithPaddle() {
     return;
   }
 
-  const hitPosition = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
-  ball.x = Math.max(paddle.x + ball.radius, Math.min(paddle.x + paddle.width - ball.radius, ball.x));
+  const rawHitPosition = (ball.x - (paddle.x + paddle.width / 2)) / (paddle.width / 2);
+  const hitPosition = Math.max(-1, Math.min(1, rawHitPosition));
   ball.y = paddle.y - ball.radius;
   ball.dx = hitPosition * 6.2;
   ball.dy = -Math.max(4.7, Math.abs(ball.dy) * 1.02);
@@ -250,6 +316,11 @@ function checkMiss() {
 
 function endGame(nextState, message) {
   state = nextState;
+  keys.clear();
+  if (animationId !== null) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
   showMessage(message);
 }
 
@@ -340,14 +411,78 @@ function movePaddleToClientX(clientX) {
   paddle.x = (clientX - rect.left) * scale - paddle.width / 2;
   clampPaddle();
 
-  if (state !== "playing") {
+  if (state === "ready") {
     ball.x = paddle.x + paddle.width / 2;
     ball.y = paddle.y - ball.radius - 1;
     draw();
   }
 }
 
+function updatePauseSelection() {
+  pauseButtons.forEach((button, index) => {
+    const isSelected = index === selectedPauseIndex;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("tabindex", isSelected ? "0" : "-1");
+  });
+
+  pauseButtons[selectedPauseIndex]?.focus();
+}
+
+function movePauseSelection(direction) {
+  selectedPauseIndex = (selectedPauseIndex + direction + pauseButtons.length) % pauseButtons.length;
+  updatePauseSelection();
+}
+
+function activatePauseSelection() {
+  const selectedButton = pauseButtons[selectedPauseIndex];
+  if (selectedButton) {
+    handlePauseAction(selectedButton.dataset.action);
+  }
+}
+
+function handlePauseAction(action) {
+  if (action === "resume") {
+    resumeGame();
+    return;
+  }
+
+  if (action === "restart") {
+    restartGame();
+    return;
+  }
+
+  if (action === "quit") {
+    quitToTitle();
+  }
+}
+
 document.addEventListener("keydown", (event) => {
+  if (state === "paused") {
+    if (event.code === "Escape") {
+      event.preventDefault();
+      resumeGame();
+      return;
+    }
+
+    if (event.code === "ArrowUp") {
+      event.preventDefault();
+      movePauseSelection(-1);
+      return;
+    }
+
+    if (event.code === "ArrowDown") {
+      event.preventDefault();
+      movePauseSelection(1);
+      return;
+    }
+
+    if (event.code === "Enter" || event.code === "Space") {
+      event.preventDefault();
+      activatePauseSelection();
+      return;
+    }
+  }
+
   if (["ArrowLeft", "ArrowRight", "KeyA", "KeyD"].includes(event.code)) {
     keys.add(event.code);
     event.preventDefault();
@@ -356,6 +491,11 @@ document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
     event.preventDefault();
     startGame();
+  }
+
+  if (event.code === "Escape") {
+    event.preventDefault();
+    togglePause();
   }
 });
 
@@ -379,5 +519,17 @@ canvas.addEventListener("touchmove", (event) => {
 }, { passive: false });
 
 canvas.addEventListener("click", startGame);
+
+pauseButtons.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    selectedPauseIndex = index;
+    handlePauseAction(button.dataset.action);
+  });
+
+  button.addEventListener("mouseenter", () => {
+    selectedPauseIndex = index;
+    updatePauseSelection();
+  });
+});
 
 resetGame();
