@@ -15,6 +15,34 @@ const BLOCK_OFFSET_Y = 60;
 const ROW_COLORS = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#3498db'];
 const ROW_SCORES = [50, 40, 30, 20, 10];
 
+// 盤面レイアウト (1=ブロックあり, 0=なし) ※全レイアウト合計スコア600
+const LAYOUTS = [
+  // ダイヤモンド: 中央に菱形 (2-4-8-4-2)
+  [
+    [0,0,0,1,1,0,0,0],
+    [0,0,1,1,1,1,0,0],
+    [1,1,1,1,1,1,1,1],
+    [0,0,1,1,1,1,0,0],
+    [0,0,0,1,1,0,0,0],
+  ],
+  // チェッカー: 市松模様 (4-4-4-4-4)
+  [
+    [1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0],
+  ],
+  // 砂時計: 両端から広がる (2-4-8-4-2)
+  [
+    [1,0,0,0,0,0,0,1],
+    [1,1,0,0,0,0,1,1],
+    [1,1,1,1,1,1,1,1],
+    [1,1,0,0,0,0,1,1],
+    [1,0,0,0,0,0,0,1],
+  ],
+];
+
 // パドル
 const PADDLE_W = 80;
 const PADDLE_H = 12;
@@ -37,9 +65,11 @@ function initGame() {
   speed = BASE_SPEED;
   paddle = { x: W / 2 - PADDLE_W / 2, y: PADDLE_Y };
   resetBall();
+  const layout = LAYOUTS[Math.floor(Math.random() * LAYOUTS.length)];
   blocks = [];
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
+      if (!layout[r][c]) continue;
       blocks.push({
         x: BLOCK_OFFSET_X + c * (BLOCK_W + BLOCK_PAD),
         y: BLOCK_OFFSET_Y + r * (BLOCK_H + BLOCK_PAD),
