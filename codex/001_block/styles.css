@@ -61,7 +61,7 @@ h1 {
 }
 
 .hud span {
-  min-width: 100px;
+  min-width: 92px;
   padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
@@ -123,7 +123,7 @@ canvas {
   border-radius: 8px;
   background: rgba(17, 19, 24, 0.78);
   color: var(--text);
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-align: center;
 }

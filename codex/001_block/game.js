@@ -1,5 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const levelEl = document.getElementById("level");
 const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const overlay = document.getElementById("overlay");
@@ -13,6 +14,7 @@ const PADDLE_WIDTH = 118;
 const PADDLE_HEIGHT = 16;
 const BALL_RADIUS = 9;
 const START_LIVES = 3;
+const FINAL_LEVEL_INDEX = 2;
 
 const brickConfig = {
   rows: 5,
@@ -24,44 +26,102 @@ const brickConfig = {
   left: 31,
 };
 
-const colors = ["#42d1a4", "#ffcc5c", "#5ab0ff", "#ff7a90", "#b18cff"];
-const boardLayouts = [
-  [
-    "111111111",
-    "111111111",
-    "111111111",
-    "111111111",
-    "000000000",
-  ],
-  [
-    "111010111",
-    "011111110",
-    "111111111",
-    "011111110",
-    "101110101",
-  ],
-  [
-    "111101111",
-    "100111001",
-    "111111111",
-    "011111110",
-    "011111110",
-  ],
+const levels = [
+  {
+    name: "Level 1",
+    label: "1",
+    colors: ["#42d1a4", "#ffcc5c", "#5ab0ff", "#ff7a90", "#b18cff"],
+    ballSpeed: { dx: 4.1, dy: -5.2 },
+    paddleSpeed: 8,
+    layouts: [
+      [
+        "111111111",
+        "111111111",
+        "111111111",
+        "111111111",
+        "000000000",
+      ],
+      [
+        "111010111",
+        "011111110",
+        "111111111",
+        "011111110",
+        "101110101",
+      ],
+    ],
+  },
+  {
+    name: "Level 2",
+    label: "2",
+    colors: ["#4ddad4", "#ffd166", "#7aa8ff", "#ff8ab3", "#c79cff"],
+    ballSpeed: { dx: 4.8, dy: -6.1 },
+    paddleSpeed: 8.8,
+    layouts: [
+      [
+        "111111111",
+        "111111111",
+        "110111011",
+        "111111111",
+        "111010111",
+      ],
+      [
+        "101111101",
+        "111111111",
+        "011111110",
+        "111111111",
+        "110101011",
+      ],
+    ],
+  },
+  {
+    name: "Boss",
+    label: "Boss",
+    colors: ["#ff6b6b", "#ffcc5c"],
+    ballSpeed: { dx: 5.1, dy: -6.4 },
+    paddleSpeed: 9.2,
+    boss: {
+      x: 245,
+      y: 78,
+      width: 310,
+      height: 82,
+      hp: 18,
+      color: "#ff6b6b",
+      accent: "#ffcc5c",
+    },
+  },
 ];
 
+let currentLevel = 0;
 let score = 0;
 let lives = START_LIVES;
 let state = "ready";
 let animationId = null;
 let keys = new Set();
 let bricks = [];
+let boss = null;
 let paddle;
 let ball;
 let selectedPauseIndex = 0;
 
+function getLevel() {
+  return levels[currentLevel];
+}
+
 function createBricks() {
   bricks = [];
-  const layout = boardLayouts[Math.floor(Math.random() * boardLayouts.length)];
+  boss = null;
+
+  const level = getLevel();
+  if (level.boss) {
+    boss = {
+      ...level.boss,
+      maxHp: level.boss.hp,
+      active: true,
+    };
+    return;
+  }
+
+  const layout = level.layouts[Math.floor(Math.random() * level.layouts.length)];
 
   for (let row = 0; row < brickConfig.rows; row += 1) {
     for (let col = 0; col < brickConfig.cols; col += 1) {
@@ -74,7 +134,7 @@ function createBricks() {
         y: brickConfig.top + row * (brickConfig.height + brickConfig.gap),
         width: brickConfig.width,
         height: brickConfig.height,
-        color: colors[row % colors.length],
+        color: level.colors[row % level.colors.length],
         active: true,
       });
     }
@@ -82,24 +142,27 @@ function createBricks() {
 }
 
 function resetPositions() {
+  const level = getLevel();
+
   paddle = {
     x: (WIDTH - PADDLE_WIDTH) / 2,
     y: HEIGHT - 44,
     width: PADDLE_WIDTH,
     height: PADDLE_HEIGHT,
-    speed: 8,
+    speed: level.paddleSpeed,
   };
 
   ball = {
     x: WIDTH / 2,
     y: paddle.y - BALL_RADIUS - 1,
-    dx: 4.1,
-    dy: -5.2,
+    dx: level.ballSpeed.dx,
+    dy: level.ballSpeed.dy,
     radius: BALL_RADIUS,
   };
 }
 
-function resetGameState() {
+function resetCampaignState() {
+  currentLevel = 0;
   score = 0;
   lives = START_LIVES;
   state = "ready";
@@ -109,12 +172,13 @@ function resetGameState() {
 }
 
 function resetGame() {
-  resetGameState();
-  showMessage("スペースキー または クリックで開始");
+  resetCampaignState();
+  showMessage("スペースキーまたはクリックで開始");
   draw();
 }
 
 function updateHud() {
+  levelEl.textContent = getLevel().label;
   scoreEl.textContent = score.toString();
   livesEl.textContent = lives.toString();
 }
@@ -150,12 +214,28 @@ function startGame() {
     return;
   }
 
+  if (state === "level-cleared") {
+    startNextLevel();
+    return;
+  }
+
   if (state === "won" || state === "lost") {
     resetGame();
   }
 
   state = "playing";
   hideMessage();
+  runLoop();
+}
+
+function startNextLevel() {
+  currentLevel += 1;
+  state = "playing";
+  createBricks();
+  resetPositions();
+  updateHud();
+  hideMessage();
+  draw();
   runLoop();
 }
 
@@ -188,7 +268,7 @@ function resumeGame() {
 }
 
 function restartGame() {
-  resetGameState();
+  resetCampaignState();
   state = "playing";
   hideMessage();
   draw();
@@ -230,6 +310,15 @@ function update() {
   collideWithWalls();
   collideWithPaddle();
   collideWithBricks();
+  if (state !== "playing") {
+    return;
+  }
+
+  collideWithBoss();
+  if (state !== "playing") {
+    return;
+  }
+
   checkMiss();
 }
 
@@ -294,24 +383,69 @@ function collideWithBricks() {
     brick.active = false;
     score += 10;
     updateHud();
-
-    const overlapLeft = ball.x + ball.radius - brick.x;
-    const overlapRight = brick.x + brick.width - (ball.x - ball.radius);
-    const overlapTop = ball.y + ball.radius - brick.y;
-    const overlapBottom = brick.y + brick.height - (ball.y - ball.radius);
-    const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
-
-    if (minOverlap === overlapLeft || minOverlap === overlapRight) {
-      ball.dx *= -1;
-    } else {
-      ball.dy *= -1;
-    }
+    bounceBallFromRect(brick);
 
     if (bricks.every((item) => !item.active)) {
-      endGame("won", "クリア！ スペースキー または クリックでリスタート");
+      completeLevel();
     }
 
     break;
+  }
+}
+
+function collideWithBoss() {
+  if (!boss?.active || !circleRectOverlap(ball, boss)) {
+    return;
+  }
+
+  boss.hp -= 1;
+  score += 25;
+  updateHud();
+  bounceBallFromRect(boss);
+
+  if (boss.hp <= 0) {
+    boss.active = false;
+    endGame("won", "完全クリア！スペースキーまたはクリックで最初から");
+  }
+}
+
+function bounceBallFromRect(rect) {
+  const overlapLeft = ball.x + ball.radius - rect.x;
+  const overlapRight = rect.x + rect.width - (ball.x - ball.radius);
+  const overlapTop = ball.y + ball.radius - rect.y;
+  const overlapBottom = rect.y + rect.height - (ball.y - ball.radius);
+  const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+  if (minOverlap === overlapLeft) {
+    ball.x = rect.x - ball.radius;
+    ball.dx = -Math.abs(ball.dx);
+    return;
+  }
+
+  if (minOverlap === overlapRight) {
+    ball.x = rect.x + rect.width + ball.radius;
+    ball.dx = Math.abs(ball.dx);
+    return;
+  }
+
+  if (minOverlap === overlapTop) {
+    ball.y = rect.y - ball.radius;
+    ball.dy = -Math.abs(ball.dy);
+    return;
+  }
+
+  ball.y = rect.y + rect.height + ball.radius;
+  ball.dy = Math.abs(ball.dy);
+}
+
+function completeLevel() {
+  if (currentLevel === 0) {
+    endGame("level-cleared", "レベル1クリア！スペースキーまたはクリックでレベル2へ");
+    return;
+  }
+
+  if (currentLevel === 1) {
+    endGame("level-cleared", "レベル2クリア！スペースキーまたはクリックでボス戦へ");
   }
 }
 
@@ -333,13 +467,13 @@ function checkMiss() {
   updateHud();
 
   if (lives <= 0) {
-    endGame("lost", "ゲームオーバー。スペースキー または クリックでリスタート");
+    endGame("lost", "ゲームオーバー。スペースキーまたはクリックで最初から");
     return;
   }
 
   state = "ready";
   resetPositions();
-  showMessage("ミス！ スペースキー または クリックで続行");
+  showMessage("ミス！スペースキーまたはクリックで続行");
 }
 
 function endGame(nextState, message) {
@@ -355,13 +489,15 @@ function endGame(nextState, message) {
 function draw() {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
   drawBackground();
+  drawStageLabel();
   drawBricks();
+  drawBoss();
   drawPaddle();
   drawBall();
 }
 
 function drawBackground() {
-  ctx.fillStyle = "#171b22";
+  ctx.fillStyle = currentLevel === FINAL_LEVEL_INDEX ? "#1f1418" : "#171b22";
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
@@ -382,6 +518,14 @@ function drawBackground() {
   }
 }
 
+function drawStageLabel() {
+  ctx.fillStyle = "rgba(255, 255, 255, 0.72)";
+  ctx.font = "700 18px Arial, sans-serif";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillText(getLevel().name, 24, 22);
+}
+
 function drawBricks() {
   for (const brick of bricks) {
     if (!brick.active) {
@@ -396,6 +540,52 @@ function drawBricks() {
     roundRect(brick.x + 5, brick.y + 4, brick.width - 10, 5, 3);
     ctx.fill();
   }
+}
+
+function drawBoss() {
+  if (!boss?.active) {
+    return;
+  }
+
+  ctx.fillStyle = "rgba(255, 107, 107, 0.16)";
+  roundRect(boss.x - 16, boss.y - 16, boss.width + 32, boss.height + 32, 12);
+  ctx.fill();
+
+  ctx.fillStyle = boss.color;
+  roundRect(boss.x, boss.y, boss.width, boss.height, 10);
+  ctx.fill();
+
+  ctx.fillStyle = boss.accent;
+  roundRect(boss.x + 18, boss.y + 14, boss.width - 36, 12, 6);
+  ctx.fill();
+
+  ctx.fillStyle = "rgba(17, 19, 24, 0.35)";
+  roundRect(boss.x + 48, boss.y + 42, boss.width - 96, 18, 9);
+  ctx.fill();
+
+  drawBossHpBar();
+}
+
+function drawBossHpBar() {
+  const barWidth = 360;
+  const barHeight = 14;
+  const x = (WIDTH - barWidth) / 2;
+  const y = 24;
+  const ratio = Math.max(0, boss.hp / boss.maxHp);
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.14)";
+  roundRect(x, y, barWidth, barHeight, 7);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffcc5c";
+  roundRect(x, y, barWidth * ratio, barHeight, 7);
+  ctx.fill();
+
+  ctx.fillStyle = "#f4f7fb";
+  ctx.font = "700 13px Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
+  ctx.fillText(`BOSS HP ${boss.hp}/${boss.maxHp}`, WIDTH / 2, y - 4);
 }
 
 function drawPaddle() {

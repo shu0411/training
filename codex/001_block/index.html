@@ -11,6 +11,7 @@
     <header class="game-header">
       <h1>Block Breaker</h1>
       <div class="hud" aria-live="polite">
+        <span>Level <strong id="level">1</strong></span>
         <span>Score <strong id="score">0</strong></span>
         <span>Lives <strong id="lives">3</strong></span>
       </div>
@@ -20,11 +21,11 @@
       <canvas id="gameCanvas" width="800" height="520" aria-label="ゲーム画面"></canvas>
       <div id="overlay" class="overlay">
         <div class="overlay-panel">
-          <p id="statusText" class="status-text">スペースキー または クリックで開始</p>
+          <p id="statusText" class="status-text">スペースキーまたはクリックで開始</p>
           <div id="pauseMenu" class="pause-menu hidden" role="menu" aria-label="ポーズメニュー">
             <button class="pause-button" type="button" data-action="resume" role="menuitem">つづける</button>
             <button class="pause-button" type="button" data-action="restart" role="menuitem">最初から</button>
-            <button class="pause-button" type="button" data-action="quit" role="menuitem">終了</button>
+            <button class="pause-button" type="button" data-action="quit" role="menuitem">タイトルへ</button>
           </div>
         </div>
       </div>
