@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block Breaker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell" aria-label="ブロック崩しゲーム">
+    <header class="game-header">
+      <h1>Block Breaker</h1>
+      <div class="hud" aria-live="polite">
+        <span>Score <strong id="score">0</strong></span>
+        <span>Lives <strong id="lives">3</strong></span>
+      </div>
+    </header>
+
+    <section class="board-wrap">
+      <canvas id="gameCanvas" width="800" height="520" aria-label="ゲーム画面"></canvas>
+      <div id="overlay" class="overlay">
+        <p id="statusText" class="status-text">Press Space or Click to Start</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
