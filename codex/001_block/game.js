@@ -82,7 +82,7 @@ function resetGameState() {
 
 function resetGame() {
   resetGameState();
-  showMessage("Press Space or Click to Start");
+  showMessage("スペースキー または クリックで開始");
   draw();
 }
 
@@ -102,7 +102,7 @@ function hideMessage() {
 }
 
 function showPauseMenu() {
-  statusText.textContent = "Paused";
+  statusText.textContent = "一時停止";
   selectedPauseIndex = 0;
   pauseMenu.classList.remove("hidden");
   overlay.classList.remove("hidden");
@@ -280,7 +280,7 @@ function collideWithBricks() {
     }
 
     if (bricks.every((item) => !item.active)) {
-      endGame("won", "Clear! Click or Press Space to Restart");
+      endGame("won", "クリア！ スペースキー または クリックでリスタート");
     }
 
     break;
@@ -305,13 +305,13 @@ function checkMiss() {
   updateHud();
 
   if (lives <= 0) {
-    endGame("lost", "Game Over. Click or Press Space to Restart");
+    endGame("lost", "ゲームオーバー。スペースキー または クリックでリスタート");
     return;
   }
 
   state = "ready";
   resetPositions();
-  showMessage("Life Lost. Click or Press Space to Continue");
+  showMessage("ミス！ スペースキー または クリックで続行");
 }
 
 function endGame(nextState, message) {
