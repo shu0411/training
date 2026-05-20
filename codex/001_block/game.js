@@ -25,6 +25,29 @@ const brickConfig = {
 };
 
 const colors = ["#42d1a4", "#ffcc5c", "#5ab0ff", "#ff7a90", "#b18cff"];
+const boardLayouts = [
+  [
+    "111111111",
+    "111111111",
+    "111111111",
+    "111111111",
+    "000000000",
+  ],
+  [
+    "111010111",
+    "011111110",
+    "111111111",
+    "011111110",
+    "101110101",
+  ],
+  [
+    "111101111",
+    "100111001",
+    "111111111",
+    "011111110",
+    "011111110",
+  ],
+];
 
 let score = 0;
 let lives = START_LIVES;
@@ -38,9 +61,14 @@ let selectedPauseIndex = 0;
 
 function createBricks() {
   bricks = [];
+  const layout = boardLayouts[Math.floor(Math.random() * boardLayouts.length)];
 
   for (let row = 0; row < brickConfig.rows; row += 1) {
     for (let col = 0; col < brickConfig.cols; col += 1) {
+      if (layout[row][col] !== "1") {
+        continue;
+      }
+
       bricks.push({
         x: brickConfig.left + col * (brickConfig.width + brickConfig.gap),
         y: brickConfig.top + row * (brickConfig.height + brickConfig.gap),
