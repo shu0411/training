@@ -1,0 +1,197 @@
+:root {
+  color-scheme: dark;
+  --bg: #111318;
+  --panel: #1d222b;
+  --panel-light: #262d38;
+  --text: #f4f7fb;
+  --muted: #aeb7c5;
+  --accent: #42d1a4;
+  --accent-2: #ffcc5c;
+  --danger: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #111318 0%, #171b22 48%, #101216 100%);
+  color: var(--text);
+  font-family: Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+}
+
+.game-shell {
+  width: min(94vw, 900px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+
+.game-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 3.75rem;
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.hud {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.hud span {
+  min-width: 92px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(29, 34, 43, 0.86);
+  text-align: center;
+}
+
+.hud strong {
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.board-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 20 / 13;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+  background: rgba(17, 19, 24, 0.28);
+  transition: opacity 160ms ease;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-panel {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  width: min(360px, 92%);
+}
+
+.status-text {
+  margin: 0;
+  max-width: 100%;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(17, 19, 24, 0.78);
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.pause-menu {
+  display: grid;
+  gap: 10px;
+  pointer-events: auto;
+  width: min(260px, 100%);
+}
+
+.pause-menu.hidden {
+  display: none;
+}
+
+.pause-button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(38, 45, 56, 0.94);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.pause-button:hover,
+.pause-button:focus-visible,
+.pause-button.is-selected {
+  border-color: var(--accent);
+  background: rgba(66, 209, 164, 0.18);
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .game-shell {
+    width: 96vw;
+    padding: 18px 0;
+    gap: 14px;
+  }
+
+  .game-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  .hud {
+    justify-content: stretch;
+  }
+
+  .hud span {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .status-text {
+    max-width: 90%;
+    font-size: 1rem;
+  }
+
+  .pause-button {
+    min-height: 42px;
+    font-size: 0.95rem;
+  }
+}
