@@ -33,3 +33,13 @@ function sakura() {
 git config --global user.name "min__96"
 git config --global user.email "<mail>"
 ```
+
+## Codex, Claudeインストール
+
+```bash
+curl -fsSL <https://claude.ai/install.sh> | bash
+```
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
