@@ -1,5 +1,12 @@
 # 新環境（WSL）での構築手順
 
+## Gitのユーザー名設定
+
+```bash
+git config --global user.name "min__96"
+git config --global user.email "<mail>"
+```
+
 ## Python 環境構築
 
 1. venv
@@ -7,6 +14,28 @@
 2. pyenvのインストール
    <https://github.com/pyenv/pyenv>
 3. `pip install -r requirements.txt`
+
+## npmのインストール
+
+1. nvmのインストール
+   <https://github.com/nvm-sh/nvm>
+
+2. npmのインストール
+
+```bash
+nvm install 24
+nvm use 24
+```
+
+## Codex, Claudeインストール
+
+```bash
+curl -fsSL <https://claude.ai/install.sh> | bash
+```
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
 
 ## サクラエディタのコマンド起動
 
@@ -25,21 +54,4 @@ function sakura() {
     if [ -x "/proc/$pid" ]; then kill $pid; fi
   )
 }
-```
-
-## Gitのユーザー名設定
-
-```bash
-git config --global user.name "min__96"
-git config --global user.email "<mail>"
-```
-
-## Codex, Claudeインストール
-
-```bash
-curl -fsSL <https://claude.ai/install.sh> | bash
-```
-
-```bash
-curl -fsSL https://chatgpt.com/codex/install.sh | sh
 ```
