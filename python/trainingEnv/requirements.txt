@@ -77,8 +77,8 @@ Pygments==2.19.2
 pyrsistent==0.20.0
 python-dateutil==2.9.0.post0
 python-json-logger==3.3.0
-pywin32==311
-pywinpty==2.0.15
+pywin32==311; sys_platform == "win32"
+pywinpty==2.0.15; sys_platform == "win32"
 PyYAML==6.0.2
 pyzmq==27.0.1
 qtconsole==5.6.1
