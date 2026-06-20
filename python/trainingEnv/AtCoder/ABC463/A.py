@@ -10,7 +10,7 @@ sys.stdin = io.StringIO(_INPUT)
 #############ここから下をコピペ#############
 
 # 入力
-X,Y = map(int,input().split())
+X, Y = map(int, input().split())
 
 # 処理
 if X / 16 == Y / 9:

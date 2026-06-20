@@ -28,25 +28,25 @@ import bisect
 
 # 入力
 N = int(input())
-list_HL = [list(map(int,input().split())) for _ in range(N)]
+list_HL = [list(map(int, input().split())) for _ in range(N)]
 Q = int(input())
-list_T = list(map(int,input().split()))
+list_T = list(map(int, input().split()))
 
 # 処理
 list_L = []
 dict_L_max_H = {}
 max_H = 0
-for H,L in reversed(list_HL):
-    max_H = max(max_H,H)
+for H, L in reversed(list_HL):
+    max_H = max(max_H, H)
     dict_L_max_H[L] = max_H
     list_L.append(L)
 
 list_L.reverse()
 
 for T in list_T:
-    idx = bisect.bisect_right(list_L,T)
+    idx = bisect.bisect_right(list_L, T)
     target_L = list_L[idx]
-    out =dict_L_max_H[target_L]
+    out = dict_L_max_H[target_L]
 
     # 出力
     print(out)

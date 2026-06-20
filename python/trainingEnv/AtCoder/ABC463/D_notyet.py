@@ -16,8 +16,8 @@ sys.stdin = io.StringIO(_INPUT)
 #############ここから下をコピペ#############
 
 # 入力
-N,K = map(int,input().split())
-list_LR = [list(map(int,input().split())) for _ in range(N)]
+N, K = map(int, input().split())
+list_LR = [list(map(int, input().split())) for _ in range(N)]
 
 
 # 処理

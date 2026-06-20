@@ -15,13 +15,13 @@ sys.stdin = io.StringIO(_INPUT)
 #############ここから下をコピペ#############
 
 # 入力
-tmpN,X = input().split()
+tmpN, X = input().split()
 N = int(tmpN)
-list_line = ["A","B","C","D","E"]
+list_line = ["A", "B", "C", "D", "E"]
 dict_line = {line: 0 for line in list_line}
 for _ in range(N):
     S = input()
-    for i,s in enumerate(list(S)):
+    for i, s in enumerate(list(S)):
         if s == "o":
             dict_line[list_line[i]] += 1
 
