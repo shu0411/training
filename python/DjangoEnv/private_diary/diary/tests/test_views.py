@@ -27,7 +27,7 @@ class TestDiaryCreateView(LoggedInTestCase):
 
     def test_create_diary_failure(self):
         response = self.client.post(reverse_lazy('diary:diary_create'))
-        self.assertFormError(response, 'form', 'title', 'このフィールドは必須です。')
+        self.assertFormError(response.content, 'form', 'title', 'このフィールドは必須です。')
     
 #DiaryUpdateViewのテストクラス
 class TestDiaryUpdateView(LoggedInTestCase):
